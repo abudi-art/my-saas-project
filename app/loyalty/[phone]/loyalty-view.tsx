@@ -256,8 +256,8 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
           </>
         ) : (
           <section className="flex flex-1 flex-col gap-4 pb-8">
-            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,62,126,0.15)]">
-              <div className="loyalty-hero-gradient px-6 pb-6 pt-6 text-white">
+            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,62,126,0.18)]">
+              <div className="loyalty-hero-gradient px-6 pb-6 pt-7 text-white">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/75">
                     {copy.tagline}
@@ -277,12 +277,10 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
                   {formatGreeting(copy, customerName)}
                 </h1>
                 <p className="mt-2 text-sm font-medium text-white/85">
-                  {cardComplete
-                    ? copy.rewardUnlocked
-                    : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
+                  {cardComplete ? copy.rewardUnlocked : copy.collectStamps}
                 </p>
 
-                <div className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-t border-white/10 pt-5">
+                <div className="mt-6 flex items-end justify-between gap-6 border-t border-white/10 pt-5">
                   <div>
                     <p className="text-[10px] font-medium uppercase tracking-wider text-white/70">
                       {copy.totalPoints}
@@ -292,14 +290,6 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
                     </p>
                   </div>
                   <div className="text-end">
-                    <p className="text-[10px] font-medium uppercase tracking-wider text-white/70">
-                      {copy.stampsLabel}
-                    </p>
-                    <p className="text-2xl font-semibold tabular-nums tracking-tight">
-                      {stampsOnCard}/{CARD_TARGET_POINTS}
-                    </p>
-                  </div>
-                  <div className="w-full text-end sm:w-auto">
                     <p className="text-[10px] font-medium uppercase tracking-wider text-white/70">
                       {copy.phoneLabel}
                     </p>

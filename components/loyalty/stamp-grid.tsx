@@ -25,21 +25,15 @@ function CheckIcon() {
   );
 }
 
-function GiftIcon() {
+function CarRewardIcon() {
   return (
     <svg
       className="h-4 w-4"
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
+      fill="currentColor"
       aria-hidden
     >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8m16 0H4m16 0-2-9a2 2 0 0 0-2-2h-1.5a2 2 0 0 0-1.5 1.5V3m0 0H9m3 9h6M9 3v1.5M9 3H6.5A2.5 2.5 0 0 0 4 5.5"
-      />
+      <path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z" />
     </svg>
   );
 }
@@ -58,7 +52,7 @@ export function StampGrid({ points, copy, animatingIndex }: StampGridProps) {
             {copy.stampCard}
           </p>
           {complete && (
-            <span className="stamp-badge-complete mt-2 inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+            <span className="stamp-badge-complete mt-2 inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
               {copy.cardComplete}
             </span>
           )}
@@ -102,12 +96,12 @@ export function StampGrid({ points, copy, animatingIndex }: StampGridProps) {
             >
               {isFilled ? (
                 isRewardSlot ? (
-                  <GiftIcon />
+                  <CarRewardIcon />
                 ) : (
                   <CheckIcon />
                 )
               ) : isRewardSlot ? (
-                <GiftIcon />
+                <CarRewardIcon />
               ) : null}
             </div>
           );

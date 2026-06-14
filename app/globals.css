@@ -41,8 +41,8 @@ body {
   position: relative;
   background: linear-gradient(
     180deg,
-    var(--bil-navy) 0%,
-    var(--bil-navy-mid) 45%,
+    var(--bil-navy-dark) 0%,
+    #001428 52%,
     var(--bil-navy-dark) 100%
   );
 }
@@ -83,18 +83,19 @@ body {
 
 .loyalty-hero-gradient {
   background: linear-gradient(
-    180deg,
-    var(--bil-navy) 0%,
-    var(--bil-navy-mid) 45%,
+    135deg,
+    #1a5a9e 0%,
+    var(--bil-navy) 38%,
+    var(--bil-navy-mid) 68%,
     var(--bil-navy-dark) 100%
   );
 }
 
 .loyalty-card-surface {
-  border-radius: var(--bil-radius, 1rem);
+  border-radius: var(--bil-radius-lg, 1.25rem);
   background: #ffffff;
   border: 1px solid rgb(226 232 240);
-  box-shadow: 0 1px 3px rgb(0 62 126 / 0.06);
+  box-shadow: 0 8px 30px rgb(0 62 126 / 0.08);
 }
 
 .loyalty-btn-primary {

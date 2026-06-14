@@ -18,7 +18,7 @@ export function BrandMark({
         alt=""
         width={44}
         height={44}
-        className="h-9 w-9 shrink-0 object-contain"
+        className="h-10 w-10 shrink-0 object-contain"
         unoptimized
       />
       <span className="border border-[#003E7E] px-2.5 py-0.5 text-sm font-semibold tracking-tight text-[#003E7E]">

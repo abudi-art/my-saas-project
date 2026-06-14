@@ -76,9 +76,19 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
 
   return (
     <article className="loyalty-card-surface rounded-2xl p-5 sm:p-6">
-      <div className="mb-5 text-center">
-        <h3 className="text-base font-medium text-[#1E293B]">{copy.myQrCode}</h3>
-        <p className="mt-1 text-sm font-medium text-[#1E293B]/65">{copy.scanAtArrival}</p>
+      <div className="mb-5 flex items-start justify-between gap-3">
+        <div>
+          <h3 className="text-base font-semibold text-[#1E293B]">{copy.myQrCode}</h3>
+          <p className="mt-0.5 text-sm font-medium text-[#1E293B]/65">{copy.scanAtArrival}</p>
+        </div>
+        <div
+          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#003E7E]/10 text-[#003E7E]"
+          aria-hidden
+        >
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" />
+          </svg>
+        </div>
       </div>
 
       <div className="flex flex-col items-center">
@@ -96,25 +106,11 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
           )}
         </div>
 
-        <p className="mt-4 text-center text-sm font-medium text-[#1E293B]/65">
-          {copy.showQrAtCheckout}
-        </p>
-
-        <span className="mt-3 inline-flex rounded-full bg-[#F8FAFC] px-3 py-1 font-mono text-xs font-medium text-[#1E293B]/70">
-          {copy.customerCode}: {customerCode}
-        </span>
-
-        {qrPayload && (
-          <p className="mt-3 max-w-full break-all px-2 text-center font-mono text-[10px] font-medium leading-relaxed text-slate-400">
-            {qrPayload}
-          </p>
-        )}
-
         <button
           type="button"
           onClick={() => void downloadQr()}
           disabled={!qrPayload}
-          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-[#1E293B] transition hover:border-[#003E7E]/30 hover:bg-[#003E7E]/5 disabled:opacity-50"
+          className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-[#1E293B] transition hover:border-[#003E7E]/30 hover:bg-[#003E7E]/5 disabled:opacity-50"
         >
           <svg
             className="h-4 w-4"
