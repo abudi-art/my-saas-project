@@ -4,13 +4,13 @@ import { LoyaltyLookupForm } from "./loyalty-lookup-form";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
+    <div className="loyalty-page-bg min-h-screen">
       <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-8 sm:px-6">
-        <div className="mb-9 flex justify-center sm:mb-10">
-          <BrandMark variant="hero" />
+        <div className="mb-6 flex justify-end">
+          <BrandMark />
         </div>
 
-        <article className="loyalty-card-surface rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(0,62,126,0.08)]">
+        <article className="loyalty-card-surface rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(0,62,126,0.12)]">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#003E7E]">
             Biltvätt i Malmö
           </p>

@@ -74,7 +74,7 @@ function PageToolbar({
 }) {
   return (
     <div
-      className="mb-5 flex items-center justify-between gap-4"
+      className="mb-4 flex items-center justify-between gap-3"
       dir="ltr"
     >
       <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
@@ -201,10 +201,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
   }, [customer?.phone, triggerStampFeedback]);
 
   return (
-    <div
-      className="loyalty-page min-h-screen bg-[#F8FAFC]"
-      dir={rtl ? "rtl" : "ltr"}
-    >
+    <div className="loyalty-page min-h-screen" dir={rtl ? "rtl" : "ltr"}>
       {toast && (
         <div className="stamp-toast fixed start-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white shadow-lg">
           {toast}
@@ -256,8 +253,8 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
           </>
         ) : (
           <section className="flex flex-1 flex-col gap-4 pb-8">
-            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,62,126,0.18)]">
-              <div className="loyalty-hero-gradient px-6 pb-6 pt-7 text-white">
+            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,62,126,0.15)]">
+              <div className="loyalty-hero-gradient px-6 pb-6 pt-6 text-white">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/75">
                     {copy.tagline}
@@ -277,7 +274,9 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
                   {formatGreeting(copy, customerName)}
                 </h1>
                 <p className="mt-2 text-sm font-medium text-white/85">
-                  {cardComplete ? copy.rewardUnlocked : copy.collectStamps}
+                  {cardComplete
+                    ? copy.rewardUnlocked
+                    : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
                 </p>
 
                 <div className="mt-6 flex items-end justify-between gap-6 border-t border-white/10 pt-5">

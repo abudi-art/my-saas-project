@@ -3,6 +3,9 @@ export const BILCLEANIKEN_COLORS = {
   navy: "#003E7E",
   navyMid: "#003B6F",
   navyDark: "#002A55",
+  skyLight: "#D4E8F7",
+  skyMid: "#9DC5E8",
+  skyDeep: "#4A8BC4",
   pageBg: "#F8FAFC",
   textDark: "#1E293B",
   textLight: "#FFFFFF",
@@ -11,3 +14,5 @@ export const BILCLEANIKEN_COLORS = {
 } as const;
 
 export const BILCLEANIKEN_GRADIENT = `linear-gradient(135deg, ${BILCLEANIKEN_COLORS.navy} 0%, ${BILCLEANIKEN_COLORS.navyMid} 52%, ${BILCLEANIKEN_COLORS.navyDark} 100%)` as const;
+
+export const BILCLEANIKEN_PAGE_GRADIENT = `linear-gradient(180deg, ${BILCLEANIKEN_COLORS.skyLight} 0%, ${BILCLEANIKEN_COLORS.skyMid} 30%, ${BILCLEANIKEN_COLORS.skyDeep} 58%, ${BILCLEANIKEN_COLORS.navy} 82%, ${BILCLEANIKEN_COLORS.navyDark} 100%)` as const;

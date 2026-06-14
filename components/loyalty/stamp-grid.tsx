@@ -48,22 +48,22 @@ export function StampGrid({ points, copy, animatingIndex }: StampGridProps) {
 
       <div className="relative z-10 flex items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-medium uppercase tracking-wider text-white/70">
-            {copy.stampCard}
-          </p>
-          {complete && (
-            <span className="stamp-badge-complete mt-2 inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide">
-              {copy.cardComplete}
-            </span>
-          )}
-        </div>
-        <div className="text-end">
           <p className="text-[10px] uppercase tracking-wider text-white/70">
             {copy.stampsLabel}
           </p>
           <p className="text-2xl font-bold tabular-nums text-white">
             {filled}/{CARD_TARGET_POINTS}
           </p>
+        </div>
+        <div className="text-end">
+          <p className="text-xs font-medium uppercase tracking-wider text-white/70">
+            {copy.stampCard}
+          </p>
+          {complete && (
+            <span className="stamp-badge-complete mt-2 inline-flex rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide">
+              {copy.cardComplete}
+            </span>
+          )}
         </div>
       </div>
 

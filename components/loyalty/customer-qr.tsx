@@ -76,11 +76,7 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
 
   return (
     <article className="loyalty-card-surface rounded-2xl p-5 sm:p-6">
-      <div className="mb-5 flex items-start justify-between gap-3">
-        <div>
-          <h3 className="text-base font-semibold text-[#1E293B]">{copy.myQrCode}</h3>
-          <p className="mt-0.5 text-sm font-medium text-[#1E293B]/65">{copy.scanAtArrival}</p>
-        </div>
+      <div className="mb-5 flex items-start gap-3">
         <div
           className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#003E7E]/10 text-[#003E7E]"
           aria-hidden
@@ -88,6 +84,10 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z" />
           </svg>
+        </div>
+        <div>
+          <h3 className="text-base font-semibold text-[#1E293B]">{copy.myQrCode}</h3>
+          <p className="mt-0.5 text-sm font-medium text-[#1E293B]/65">{copy.scanAtArrival}</p>
         </div>
       </div>
 
