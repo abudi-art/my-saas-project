@@ -4,9 +4,9 @@ import { LoyaltyLookupForm } from "./loyalty-lookup-form";
 
 export default function Home() {
   return (
-    <div className="loyalty-page-bg min-h-screen">
-      <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-8 sm:px-6">
-        <BrandMark variant="hero" className="mb-6" />
+    <div className="loyalty-page-bg">
+      <main className="mx-auto flex min-h-[100dvh] max-w-lg flex-col justify-center px-4 py-8 sm:px-6">
+        <BrandMark variant="hero" className="mb-5" />
 
         <article className="loyalty-card-surface rounded-2xl p-8 text-center">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#003E7E]">

@@ -40,7 +40,7 @@ function LanguageSwitcher({
 }) {
   return (
     <div
-      className="flex shrink-0 items-center gap-0.5 rounded-full border border-slate-200 bg-white p-1 shadow-[0_2px_8px_rgba(15,23,42,0.1)]"
+      className="flex shrink-0 items-center gap-0.5 rounded-full border border-white/40 bg-white/95 p-1 shadow-[0_4px_16px_rgba(0,42,85,0.18)] backdrop-blur-sm"
       role="group"
       aria-label="Language"
     >
