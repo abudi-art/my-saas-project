@@ -1,22 +1,13 @@
-import Image from "next/image";
 import Link from "next/link";
-import { BILCLEANIKEN_LOGO_URL } from "@/lib/i18n/loyalty";
+import { BrandMark } from "@/components/loyalty/brand-mark";
 import { LoyaltyLookupForm } from "./loyalty-lookup-form";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-8 sm:px-6">
-        <div className="mb-6 flex justify-center">
-          <Image
-            src={BILCLEANIKEN_LOGO_URL}
-            alt="Bilcleaniken"
-            width={72}
-            height={72}
-            className="h-16 w-16 object-contain"
-            priority
-            unoptimized
-          />
+        <div className="mb-8 flex justify-center">
+          <BrandMark variant="hero" />
         </div>
 
         <article className="loyalty-card-surface rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(0,62,126,0.08)]">

@@ -74,7 +74,7 @@ function PageToolbar({
 }) {
   return (
     <div
-      className="mb-4 flex items-center justify-between gap-3"
+      className="mb-5 flex items-center justify-between gap-4"
       dir="ltr"
     >
       <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
