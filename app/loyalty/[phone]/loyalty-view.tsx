@@ -29,6 +29,7 @@ type LoyaltyViewProps = {
   phone: string;
   customer: LoyaltyCustomer | null;
   configError?: boolean;
+  appUrl?: string;
 };
 
 function LanguageSwitcher({
@@ -116,7 +117,7 @@ function LoyaltyBrandHeader({
   );
 }
 
-export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) {
+export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyViewProps) {
   const [locale, setLocale] = useState<Locale>(defaultLocale);
   const [points, setPoints] = useState(customer?.points ?? 0);
   const [animatingStamp, setAnimatingStamp] = useState<number | null>(null);
@@ -355,7 +356,7 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
               />
             </div>
 
-            <CustomerQr phone={canonicalPhone} copy={copy} />
+            <CustomerQr phone={canonicalPhone} copy={copy} appUrl={appUrl} />
 
             <WalletButtons phone={canonicalPhone} copy={copy} />
 

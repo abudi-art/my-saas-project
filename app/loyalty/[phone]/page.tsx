@@ -36,6 +36,7 @@ export default async function LoyaltyPage({ params }: PageProps) {
     <LoyaltyView
       phone={phone}
       customer={notFound ? null : customer}
+      appUrl={process.env.NEXT_PUBLIC_APP_URL}
       configError={
         !process.env.NEXT_PUBLIC_SUPABASE_URL ||
         !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY

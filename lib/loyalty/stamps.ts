@@ -22,11 +22,31 @@ export function getCustomerCode(phone: string): string {
   return `BIL-${suffix}`;
 }
 
+export function resolveAppBaseUrl(): string {
+  const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");
+  if (fromEnv) return fromEnv;
+
+  if (typeof window !== "undefined" && window.location.origin) {
+    return window.location.origin;
+  }
+
+  return "";
+}
+
+export function buildLoyaltyPageUrl(phone: string, appUrl?: string): string | null {
+  const base = (appUrl ?? resolveAppBaseUrl()).replace(/\/$/, "");
+  if (!base) return null;
+
+  const normalizedPhone = decodeURIComponent(phone.trim());
+  return `${base}/loyalty/${encodeURIComponent(normalizedPhone)}`;
+}
+
 export function getLoyaltyQrPayload(phone: string, appUrl?: string): string {
-  const base =
-    appUrl?.replace(/\/$/, "") ||
-    (typeof window !== "undefined" ? window.location.origin : "");
-  return `${base}/loyalty/${encodeURIComponent(phone)}`;
+  const url = buildLoyaltyPageUrl(phone, appUrl);
+  if (!url) {
+    throw new Error("NEXT_PUBLIC_APP_URL is not configured");
+  }
+  return url;
 }
 
 export function parsePhoneFromQrPayload(payload: string): string | null {
