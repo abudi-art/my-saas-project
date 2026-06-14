@@ -41,7 +41,7 @@ body {
   height: 1.25rem;
   transform: translate(-50%, -50%);
   border-radius: 0 0 9999px 9999px;
-  background: #f3f4f6;
+  background: #f8fafc;
   box-shadow: inset 0 -1px 0 rgb(148 163 184 / 0.25);
 }
 
@@ -49,27 +49,20 @@ body {
   --stamp-filled: #334155;
   --stamp-reward: #10b981;
   --loyalty-bar: #002d5b;
-  --loyalty-bar-deep: #001a36;
-  --loyalty-badge: #003366;
-  --loyalty-header-from: #003d73;
-  --loyalty-header-to: #002d5b;
+  --loyalty-badge-bg: #001a38;
+  --loyalty-header-from: #003d7a;
+  --loyalty-header-to: #002244;
   min-height: 100vh;
-  background-color: #f3f4f6;
-}
-
-.loyalty-header-bar {
-  background: linear-gradient(
-    135deg,
-    var(--loyalty-header-from) 0%,
-    var(--loyalty-header-to) 100%
-  );
-  box-shadow:
-    0 10px 30px rgb(30 58 138 / 0.18),
-    inset 0 1px 0 rgb(255 255 255 / 0.08);
+  background-color: #f8fafc;
 }
 
 .loyalty-hero-card {
-  background: var(--loyalty-bar-deep);
+  background: linear-gradient(
+    180deg,
+    var(--loyalty-bar) 0%,
+    var(--loyalty-header-from) 38%,
+    var(--loyalty-header-to) 100%
+  );
 }
 
 .loyalty-top-bar {
@@ -78,46 +71,79 @@ body {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: linear-gradient(
-    180deg,
-    var(--loyalty-bar) 0%,
-    var(--loyalty-bar-deep) 100%
-  );
-  border-bottom: 1px solid rgb(255 255 255 / 0.1);
+  background: var(--loyalty-bar);
+  border-bottom: 1px solid rgb(255 255 255 / 0.08);
 }
 
 .loyalty-logo-badge-wrap {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 3rem;
   padding: 0.625rem 1rem;
-  background-color: var(--loyalty-badge);
-  border: 1px solid rgb(255 255 255 / 0.2);
-  border-radius: 0.625rem;
+  background: var(--loyalty-badge-bg);
+  border: 1px solid rgb(255 255 255 / 0.14);
+  border-radius: 10px;
   box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.12),
-    0 3px 10px rgb(0 0 0 / 0.22);
+    inset 0 1px 0 rgb(255 255 255 / 0.1),
+    0 4px 14px rgb(0 0 0 / 0.22);
 }
 
 .loyalty-logo-official {
   display: block;
-  width: auto;
-  max-width: min(100%, 9.75rem);
-  height: 2.25rem;
+  max-width: min(100%, 10.5rem);
+  height: auto;
   object-fit: contain;
+  border-radius: 4px;
+}
+
+.loyalty-lang-switcher {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.25rem;
+  border-radius: 9999px;
+  background: #ffffff;
+  border: 1px solid rgb(226 232 240);
+  box-shadow:
+    0 2px 8px rgb(15 23 42 / 0.1),
+    0 1px 2px rgb(15 23 42 / 0.06);
+}
+
+.loyalty-lang-btn {
+  border: none;
+  border-radius: 9999px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1;
+  color: #475569;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.loyalty-lang-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.loyalty-lang-btn--active {
+  background: var(--loyalty-bar);
+  color: #ffffff;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
+}
+
+.loyalty-lang-btn--active:hover {
+  background: #003d7a;
+  color: #ffffff;
 }
 
 .loyalty-hero-body {
-  background: linear-gradient(
-    165deg,
-    var(--loyalty-header-from) 0%,
-    var(--loyalty-header-to) 100%
-  );
-}
-
-[dir="rtl"] .loyalty-top-bar {
-  flex-direction: row-reverse;
+  padding: 1.25rem 1.5rem 1.5rem;
 }
 
 .loyalty-qr-card {
