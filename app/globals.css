@@ -116,10 +116,10 @@ body {
 }
 
 .loyalty-card-surface {
-  border-radius: var(--bil-radius, 1rem);
+  border-radius: var(--bil-radius-lg, 1.25rem);
   background: #ffffff;
-  border: 1px solid rgb(226 232 240);
-  box-shadow: 0 1px 3px rgb(0 62 126 / 0.06);
+  border: 1px solid rgb(255 255 255 / 0.65);
+  box-shadow: 0 12px 40px rgb(0 42 85 / 0.16);
 }
 
 .loyalty-btn-primary {
