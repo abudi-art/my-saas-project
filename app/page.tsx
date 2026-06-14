@@ -8,8 +8,8 @@ export default function Home() {
       <BrandTopBar />
 
       <main className="mx-auto flex min-h-[calc(100vh-5rem)] max-w-lg flex-col justify-center px-4 py-8 sm:px-6">
-        <article className="loyalty-card-surface rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(0,62,126,0.08)]">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#003E7E]">
+        <article className="loyalty-card-surface rounded-2xl p-8 text-center shadow-[0_8px_30px_rgba(0,74,128,0.08)]">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#004a80]">
             Biltvätt i Malmö
           </p>
           <h1 className="mt-3 text-3xl font-semibold tracking-tight text-[#1E293B]">
@@ -32,7 +32,7 @@ export default function Home() {
             Exempel:{" "}
             <Link
               href="/loyalty/0701234567"
-              className="text-[#003E7E] underline-offset-2 hover:underline"
+              className="text-[#004a80] underline-offset-2 hover:underline"
             >
               /loyalty/0701234567
             </Link>

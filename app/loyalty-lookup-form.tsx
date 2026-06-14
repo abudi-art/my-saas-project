@@ -27,7 +27,7 @@ export function LoyaltyLookupForm() {
           placeholder="0701234567"
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
-          className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-[#1E293B] shadow-sm outline-none ring-[#003E7E] focus:ring-2"
+          className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-[#1E293B] shadow-sm outline-none ring-[#004a80] focus:ring-2"
         />
       </label>
       <button

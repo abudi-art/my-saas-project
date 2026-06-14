@@ -51,7 +51,7 @@ function LanguageSwitcher({
           onClick={() => onChange(code)}
           className={`rounded-full px-3 py-1.5 text-xs font-medium transition ${
             locale === code
-              ? "bg-[#003E7E] text-white shadow-sm"
+              ? "bg-[#004a80] text-white shadow-sm"
               : "text-[#1E293B] hover:bg-slate-100"
           }`}
           aria-pressed={locale === code}
@@ -215,7 +215,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
       <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6 sm:px-6">
         {notFound ? (
           <>
-            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,62,126,0.15)]">
+            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,74,128,0.15)]">
               <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
@@ -225,9 +225,9 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
 
             <section className="mt-5 flex flex-1 flex-col items-center justify-center">
               <div className="loyalty-card-surface w-full p-8 text-center">
-                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#003E7E]/10">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#004a80]/10">
                   <svg
-                    className="h-7 w-7 text-[#003E7E]"
+                    className="h-7 w-7 text-[#004a80]"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -255,13 +255,13 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
           </>
         ) : (
           <section className="flex flex-1 flex-col gap-4 pb-8">
-            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,62,126,0.15)]">
+            <article className="overflow-hidden rounded-2xl shadow-[0_8px_30px_rgba(0,74,128,0.15)]">
               <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
                 copy={copy}
               />
-              <div className="bg-gradient-to-b from-[#003E7E] to-[#002A55] px-6 pb-6 pt-5 text-white">
+              <div className="loyalty-hero-gradient px-6 pb-6 pt-5 text-white">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/75">
                     {copy.tagline}
@@ -331,7 +331,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
               </h3>
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-sm font-medium text-[#1E293B]/80">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#003E7E]/10 text-sm font-semibold text-[#003E7E]">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#004a80]/10 text-sm font-semibold text-[#004a80]">
                     +1
                   </span>
                   {copy.exteriorWash}

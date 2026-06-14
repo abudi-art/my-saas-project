@@ -14,15 +14,13 @@ export function BrandTopBar({
   className = "",
 }: BrandTopBarProps) {
   return (
-    <header
-      className={`flex items-center justify-between gap-4 bg-[#003E7E] px-5 py-5 sm:px-6 ${className}`}
-    >
+    <header className={`loyalty-top-bar w-full px-5 py-5 sm:px-6 ${className}`}>
       <Image
         src={BILCLEANIKEN_BADGE_URL}
         alt={brandName}
         width={176}
         height={52}
-        className="h-10 w-auto max-w-[11rem] shrink-0 object-contain sm:h-11"
+        className="loyalty-logo-official h-10 w-auto shrink-0 sm:h-11"
         priority
         unoptimized
       />
