@@ -114,7 +114,7 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
           type="button"
           onClick={() => void downloadQr()}
           disabled={!qrPayload}
-          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-[#1E293B] transition hover:border-[#004a80]/30 hover:bg-[#004a80]/5 disabled:opacity-50"
+          className="mt-5 inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-medium text-[#1E293B] transition hover:border-[#003E7E]/30 hover:bg-[#003E7E]/5 disabled:opacity-50"
         >
           <svg
             className="h-4 w-4"

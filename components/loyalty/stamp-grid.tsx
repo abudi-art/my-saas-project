@@ -49,7 +49,7 @@ export function StampGrid({ points, copy, animatingIndex }: StampGridProps) {
   const complete = isCardComplete(points);
 
   return (
-    <div className="loyalty-stamp-card relative overflow-hidden rounded-2xl p-5 shadow-[0_8px_30px_rgba(0,74,128,0.15)]">
+    <div className="loyalty-stamp-card relative overflow-hidden rounded-2xl p-5 shadow-[0_8px_30px_rgba(0,62,126,0.15)]">
       <div className="loyalty-card-notch" aria-hidden />
 
       <div className="relative z-10 flex items-start justify-between gap-3">

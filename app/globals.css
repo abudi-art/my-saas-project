@@ -3,11 +3,14 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --bil-navy: #004a80;
-  --bil-navy-dark: #003659;
+  --bil-navy: #003e7e;
+  --bil-navy-mid: #003b6f;
+  --bil-navy-dark: #002a55;
   --bil-page-bg: #f8fafc;
   --bil-text-dark: #1e293b;
   --bil-text-light: #ffffff;
+  --bil-radius: 1rem;
+  --bil-radius-lg: 1.25rem;
 }
 
 @theme inline {
@@ -36,7 +39,12 @@ body {
 
 .loyalty-stamp-card {
   position: relative;
-  background: linear-gradient(180deg, var(--bil-navy) 0%, var(--bil-navy-dark) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--bil-navy) 0%,
+    var(--bil-navy-mid) 45%,
+    var(--bil-navy-dark) 100%
+  );
 }
 
 .loyalty-card-notch {
@@ -65,37 +73,40 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background-color: var(--bil-navy);
-}
-
-.loyalty-logo-official {
-  display: block;
-  max-width: min(100%, 11rem);
-  height: auto;
-  object-fit: contain;
+  background: linear-gradient(
+    135deg,
+    var(--bil-navy) 0%,
+    var(--bil-navy-mid) 52%,
+    var(--bil-navy-dark) 100%
+  );
 }
 
 .loyalty-hero-gradient {
-  background: linear-gradient(180deg, var(--bil-navy) 0%, var(--bil-navy-dark) 100%);
+  background: linear-gradient(
+    180deg,
+    var(--bil-navy) 0%,
+    var(--bil-navy-mid) 45%,
+    var(--bil-navy-dark) 100%
+  );
 }
 
 .loyalty-card-surface {
-  border-radius: 1rem;
+  border-radius: var(--bil-radius, 1rem);
   background: #ffffff;
   border: 1px solid rgb(226 232 240);
-  box-shadow: 0 1px 3px rgb(0 74 128 / 0.08);
+  box-shadow: 0 1px 3px rgb(0 62 126 / 0.06);
 }
 
 .loyalty-btn-primary {
   border-radius: 0.75rem;
-  background-color: var(--bil-navy);
+  background-color: #003e7e;
   color: #ffffff;
   font-weight: 600;
   transition: background-color 0.15s ease;
 }
 
 .loyalty-btn-primary:hover {
-  background-color: var(--bil-navy-dark);
+  background-color: #002a55;
 }
 
 .loyalty-qr-card {

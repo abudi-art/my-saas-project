@@ -78,9 +78,9 @@ export function WalletButtons({ phone, copy }: WalletButtonsProps) {
             type="button"
             disabled={loading !== null}
             onClick={() => enroll("google")}
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#004a80]/20 bg-white px-4 py-3.5 text-sm font-semibold text-[#1E293B] transition hover:border-[#004a80]/40 hover:bg-[#004a80]/5 disabled:opacity-60"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-[#003E7E]/20 bg-white px-4 py-3.5 text-sm font-semibold text-[#1E293B] transition hover:border-[#003E7E]/40 hover:bg-[#003E7E]/5 disabled:opacity-60"
           >
-            <span className="text-lg font-bold text-[#004a80]" aria-hidden>
+            <span className="text-lg font-bold text-[#003E7E]" aria-hidden>
               G
             </span>
             {loading === "google" ? copy.walletLoading : copy.addToGoogleWallet}
