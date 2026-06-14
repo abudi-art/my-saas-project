@@ -71,37 +71,37 @@ body {
   );
 }
 
-.loyalty-logo-shell {
-  display: flex;
+.loyalty-logo-badge {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  max-width: 100%;
-  padding: 16px;
-  border-radius: 12px;
-  background-color: #003366;
-  border: 1px solid rgb(255 255 255 / 0.15);
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #002244 0%, #003366 100%);
+  border: 1px solid rgb(255 255 255 / 0.18);
   box-shadow:
-    0 4px 6px rgb(0 0 0 / 0.1),
-    0 8px 20px rgb(0 0 0 / 0.18),
-    inset 0 1px 0 rgb(255 255 255 / 0.1);
+    inset 0 1px 0 rgb(255 255 255 / 0.12),
+    0 4px 12px rgb(0 0 0 / 0.22);
 }
 
-.loyalty-logo-image {
+.loyalty-logo-badge-image {
   display: block;
-  max-width: 100%;
+  max-width: min(100%, 8.75rem);
   height: auto;
   object-fit: contain;
-  /* Force visible mark on navy shell even when source SVG is white or light. */
-  filter: drop-shadow(0 2px 4px rgb(0 0 0 / 0.35)) brightness(0) invert(1);
+  filter: brightness(0) invert(1);
+}
+
+.loyalty-qr-card {
+  background: #ffffff;
 }
 
 .loyalty-qr-frame {
-  padding: 1.5rem;
+  padding: 16px;
+  border-radius: 16px;
   background: #ffffff;
   border: 1px solid rgb(226 232 240);
-  /* Quiet zone: keep scan-friendly white margin around the code. */
-  box-shadow: inset 0 0 0 4px #ffffff;
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.05);
 }
 
 .loyalty-qr-svg {
@@ -113,10 +113,11 @@ body {
 
 .loyalty-qr-svg svg {
   display: block;
-  width: 16rem;
-  height: 16rem;
+  width: 15rem;
+  height: 15rem;
   max-width: 100%;
   background: #ffffff;
+  border-radius: 12px;
 }
 
 .loyalty-live-dot {
@@ -228,11 +229,6 @@ body {
 
 [dir="rtl"] .loyalty-page .text-left {
   text-align: right;
-}
-
-[dir="rtl"] .loyalty-logo-shell {
-  margin-inline-end: auto;
-  margin-inline-start: 0;
 }
 
 [dir="rtl"] .loyalty-page .loyalty-hero-card .flex-wrap {

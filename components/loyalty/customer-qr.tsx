@@ -14,12 +14,11 @@ type CustomerQrProps = {
   appUrl?: string;
 };
 
-/** High-contrast QR: black on white, level H, quiet zone via margin + frame padding. */
 const QR_OPTIONS = {
   errorCorrectionLevel: "H" as const,
   margin: 4,
   color: { dark: "#000000", light: "#ffffff" },
-  width: 280,
+  width: 260,
 };
 
 export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
@@ -76,32 +75,14 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
   }
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <div className="mb-4 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-700">
-          <svg
-            className="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth={1.8}
-            aria-hidden
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M4 5h4v4H4V5zm0 10h4v4H4v-4zm10-10h4v4h-4V5zm0 10h4v4h-4v-4z"
-            />
-          </svg>
-        </div>
-        <div>
-          <h3 className="font-semibold text-slate-900">{copy.myQrCode}</h3>
-          <p className="text-xs text-slate-500">{copy.scanAtArrival}</p>
-        </div>
+    <article className="loyalty-qr-card rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm sm:p-6">
+      <div className="mb-5 text-center">
+        <h3 className="text-base font-medium text-slate-800">{copy.myQrCode}</h3>
+        <p className="mt-1 text-sm font-medium text-slate-500">{copy.scanAtArrival}</p>
       </div>
 
       <div className="flex flex-col items-center">
-        <div className="loyalty-qr-frame rounded-2xl shadow-inner">
+        <div className="loyalty-qr-frame">
           {qrSvg ? (
             <div
               className="loyalty-qr-svg"
@@ -109,29 +90,31 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
               aria-label={copy.myQrCode}
             />
           ) : (
-            <div className="flex h-64 w-64 items-center justify-center px-4 text-center text-sm text-slate-400">
+            <div className="flex h-56 w-56 items-center justify-center px-4 text-center text-sm font-medium text-slate-400">
               {qrError ?? copy.loading}
             </div>
           )}
         </div>
 
-        <p className="mt-4 text-xs text-slate-500">{copy.showQrAtCheckout}</p>
+        <p className="mt-4 text-center text-sm font-medium text-slate-500">
+          {copy.showQrAtCheckout}
+        </p>
+
+        <span className="mt-3 inline-flex rounded-full bg-slate-100 px-3 py-1 font-mono text-xs font-medium text-slate-600">
+          {copy.customerCode}: {customerCode}
+        </span>
 
         {qrPayload && (
-          <p className="mt-2 max-w-full break-all px-2 text-center font-mono text-[10px] leading-relaxed text-slate-400">
+          <p className="mt-3 max-w-full break-all px-2 text-center font-mono text-[10px] font-medium leading-relaxed text-slate-400">
             {qrPayload}
           </p>
         )}
-
-        <span className="mt-3 inline-flex rounded-full bg-slate-100 px-3 py-1 font-mono text-xs text-slate-600">
-          {copy.customerCode}: {customerCode}
-        </span>
 
         <button
           type="button"
           onClick={() => void downloadQr()}
           disabled={!qrPayload}
-          className="mt-4 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+          className="mt-5 inline-flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:bg-slate-50 disabled:opacity-50"
         >
           <svg
             className="h-4 w-4"

@@ -35,21 +35,13 @@ type LoyaltyViewProps = {
 function LanguageSwitcher({
   locale,
   onChange,
-  variant = "light",
 }: {
   locale: Locale;
   onChange: (locale: Locale) => void;
-  variant?: "light" | "dark";
 }) {
-  const isLight = variant === "light";
-
   return (
     <div
-      className={`flex shrink-0 rounded-xl p-1 ${
-        isLight
-          ? "border border-white/20 bg-white/10 backdrop-blur-sm"
-          : "border border-slate-200 bg-white shadow-sm"
-      }`}
+      className="flex shrink-0 rounded-full border border-white/20 bg-white/10 p-1 backdrop-blur-sm"
       role="group"
       aria-label="Language"
     >
@@ -58,14 +50,10 @@ function LanguageSwitcher({
           key={code}
           type="button"
           onClick={() => onChange(code)}
-          className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold transition sm:px-3 ${
+          className={`rounded-full px-2.5 py-1 text-xs font-medium transition sm:px-3 sm:py-1.5 ${
             locale === code
-              ? isLight
-                ? "bg-white text-blue-800 shadow-sm"
-                : "bg-blue-700 text-white shadow-sm"
-              : isLight
-                ? "text-blue-100 hover:bg-white/10 hover:text-white"
-                : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+              ? "bg-white text-blue-900 shadow-sm"
+              : "text-blue-100 hover:bg-white/10 hover:text-white"
           }`}
           aria-pressed={locale === code}
         >
@@ -76,44 +64,29 @@ function LanguageSwitcher({
   );
 }
 
-function LoyaltyBrandHeader({
+function HeroHeaderRow({
   locale,
   onLocaleChange,
   copy,
-  variant = "standalone",
 }: {
   locale: Locale;
   onLocaleChange: (locale: Locale) => void;
   copy: ReturnType<typeof getLoyaltyCopy>;
-  variant?: "standalone" | "embedded";
 }) {
-  const embedded = variant === "embedded";
-
   return (
-    <div
-      className={`flex items-center justify-between gap-3 ${
-        embedded
-          ? "border-b border-white/10 px-4 py-3 sm:px-5 sm:py-4"
-          : "loyalty-header-bar rounded-3xl px-4 py-3 sm:px-5 sm:py-4"
-      }`}
-    >
-      <div className="loyalty-logo-shell min-w-0 flex-1">
+    <header className="flex items-center justify-between gap-4">
+      <div className="loyalty-logo-badge shrink-0">
         <Image
           src={BILCLEANIKEN_LOGO_URL}
           alt={copy.brandName}
-          width={168}
-          height={48}
-          className="loyalty-logo-image h-8 w-auto max-w-full sm:h-9"
+          width={148}
+          height={40}
+          className="loyalty-logo-badge-image h-7 w-auto sm:h-8"
           priority
         />
       </div>
-
-      <LanguageSwitcher
-        locale={locale}
-        onChange={onLocaleChange}
-        variant={embedded ? "light" : "dark"}
-      />
-    </div>
+      <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
+    </header>
   );
 }
 
@@ -240,7 +213,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
       dir={rtl ? "rtl" : "ltr"}
     >
       {toast && (
-        <div className="stamp-toast fixed start-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-lg">
+        <div className="stamp-toast fixed start-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-medium text-white shadow-lg">
           {toast}
         </div>
       )}
@@ -252,14 +225,16 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
       <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6 sm:px-6">
         {notFound ? (
           <>
-            <LoyaltyBrandHeader
-              locale={locale}
-              onLocaleChange={setLocale}
-              copy={copy}
-            />
+            <article className="loyalty-hero-card rounded-3xl p-6 shadow-xl shadow-blue-900/20 sm:p-6">
+              <HeroHeaderRow
+                locale={locale}
+                onLocaleChange={setLocale}
+                copy={copy}
+              />
+            </article>
 
             <section className="mt-5 flex flex-1 flex-col items-center justify-center">
-              <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg">
+              <div className="w-full rounded-3xl border border-slate-200/80 bg-white p-8 text-center shadow-sm">
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
                   <svg
                     className="h-7 w-7 text-blue-600"
@@ -279,74 +254,75 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
                 <h2 className="text-xl font-semibold text-slate-900">
                   {copy.customerNotFound}
                 </h2>
-                <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                <p className="mt-3 text-sm font-medium leading-relaxed text-slate-500">
                   {copy.customerNotFoundHint}
                 </p>
-                <p className="mt-5 text-xs text-slate-400">
+                <p className="mt-5 text-xs font-medium text-slate-400">
                   {copy.phoneLabel}: {phone}
                 </p>
               </div>
             </section>
           </>
         ) : (
-          <section className="flex flex-1 flex-col gap-5 pb-8">
-            <article className="loyalty-hero-card overflow-hidden rounded-3xl shadow-xl shadow-blue-900/20">
-              <LoyaltyBrandHeader
+          <section className="flex flex-1 flex-col gap-4 pb-8">
+            <article className="loyalty-hero-card overflow-hidden rounded-3xl p-6 text-white shadow-xl shadow-blue-900/20 sm:p-6">
+              <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
                 copy={copy}
-                variant="embedded"
               />
 
-              <div className="bg-gradient-to-br from-blue-700 to-blue-900 px-4 pb-6 pt-4 text-white sm:px-6 sm:pb-7">
-                <div className="mb-4 flex items-center justify-between gap-3">
-                  <p className="text-xs font-semibold uppercase tracking-widest text-blue-200">
-                    {copy.tagline}
-                  </p>
-                  {liveConnected && (
-                    <span
-                      className="loyalty-live-badge inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-200 ring-1 ring-emerald-400/30"
-                      aria-live="polite"
-                    >
-                      <span className="loyalty-live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                      {copy.liveSync}
-                    </span>
-                  )}
-                </div>
-
-                <h1 className="text-2xl font-bold leading-tight sm:text-[1.65rem]">
-                  {formatGreeting(copy, customerName)}
-                </h1>
-                <p className="mt-2 text-sm text-blue-100">
-                  {cardComplete
-                    ? copy.rewardUnlocked
-                    : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
+              <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/10 pt-6">
+                <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-200/90">
+                  {copy.tagline}
                 </p>
+                {liveConnected && (
+                  <span
+                    className="loyalty-live-badge inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-emerald-200 ring-1 ring-emerald-400/30"
+                    aria-live="polite"
+                  >
+                    <span className="loyalty-live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                    {copy.liveSync}
+                  </span>
+                )}
+              </div>
 
-                <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] uppercase tracking-wider text-blue-200">
-                      {copy.totalPoints}
-                    </p>
-                    <p className="text-4xl font-bold tabular-nums">{points}</p>
-                  </div>
-                  <div className="text-end">
-                    <p className="text-[10px] uppercase tracking-wider text-blue-200">
-                      {copy.stampsLabel}
-                    </p>
-                    <p className="text-2xl font-bold tabular-nums">
-                      {stampsOnCard}/{CARD_TARGET_POINTS}
-                    </p>
-                  </div>
-                  <div className="w-full border-t border-white/10 pt-4 text-end sm:w-auto sm:border-0 sm:pt-0">
-                    <p className="text-[10px] uppercase tracking-wider text-blue-200">
-                      {copy.phoneLabel}
-                    </p>
-                    <p className="font-mono text-sm">{canonicalPhone}</p>
-                  </div>
+              <h1 className="mt-4 text-2xl font-semibold leading-tight tracking-tight sm:text-[1.65rem]">
+                {formatGreeting(copy, customerName)}
+              </h1>
+              <p className="mt-2 text-sm font-medium text-blue-100/90">
+                {cardComplete
+                  ? copy.rewardUnlocked
+                  : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
+              </p>
+
+              <div className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-t border-white/10 pt-5">
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
+                    {copy.totalPoints}
+                  </p>
+                  <p className="text-4xl font-semibold tabular-nums tracking-tight">
+                    {points}
+                  </p>
+                </div>
+                <div className="text-end">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
+                    {copy.stampsLabel}
+                  </p>
+                  <p className="text-2xl font-semibold tabular-nums tracking-tight">
+                    {stampsOnCard}/{CARD_TARGET_POINTS}
+                  </p>
+                </div>
+                <div className="w-full text-end sm:w-auto">
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
+                    {copy.phoneLabel}
+                  </p>
+                  <p className="font-mono text-sm font-medium">{canonicalPhone}</p>
                 </div>
               </div>
             </article>
+
+            <CustomerQr phone={canonicalPhone} copy={copy} appUrl={appUrl} />
 
             <div className={stampGridPulse ? "stamp-grid-sync-pulse" : undefined}>
               <StampGrid
@@ -356,23 +332,21 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
               />
             </div>
 
-            <CustomerQr phone={canonicalPhone} copy={copy} appUrl={appUrl} />
-
             <WalletButtons phone={canonicalPhone} copy={copy} />
 
-            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h3 className="mb-3 text-sm font-semibold text-slate-900">
+            <article className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
+              <h3 className="mb-3 text-sm font-medium text-slate-800">
                 {copy.rulesTitle}
               </h3>
               <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-slate-700">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-700">
+                <li className="flex items-center gap-3 text-sm font-medium text-slate-600">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-sm font-semibold text-blue-700">
                     +1
                   </span>
                   {copy.exteriorWash}
                 </li>
-                <li className="flex items-center gap-3 text-sm text-slate-700">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
+                <li className="flex items-center gap-3 text-sm font-medium text-slate-600">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-semibold text-slate-700">
                     +2
                   </span>
                   {copy.fullService}
