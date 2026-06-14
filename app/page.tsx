@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       <main className="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-8 sm:px-6">
-        <div className="mb-8 flex justify-center">
+        <div className="mb-9 flex justify-center sm:mb-10">
           <BrandMark variant="hero" />
         </div>
 
