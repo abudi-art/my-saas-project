@@ -1,0 +1,73 @@
+import type { Locale } from "@/lib/i18n/loyalty";
+
+export const staffTranslations = {
+  sv: {
+    title: "Skanna kundkod",
+    subtitle: "Skanna QR-kod eller ange telefonnummer",
+    phonePlaceholder: "Telefonnummer",
+    transactionPlaceholder: "Transaktions-ID (valfritt)",
+    stampsToAdd: "Antal stämplar att lägga till",
+    addStamp: "Lägg till stämpel",
+    done: "Klar",
+    scanning: "Riktade kameran mot QR-koden…",
+    cameraError: "Kameran kunde inte startas",
+    success: "Stämpel tillagd!",
+    customerFound: "Kund hittad",
+    lookupCustomer: "Sök kund",
+    currentStamps: "Stämplar på kortet",
+    notFound: "Kunden hittades inte",
+    unauthorized: "Ogiltig personalnyckel",
+    apiError: "Något gick fel. Försök igen.",
+    staffKeyPlaceholder: "Personalnyckel",
+    startCamera: "Starta kamera",
+    stopCamera: "Stoppa kamera",
+  },
+  en: {
+    title: "Scan customer code",
+    subtitle: "Scan QR code or enter phone number",
+    phonePlaceholder: "Phone number",
+    transactionPlaceholder: "Transaction ID (optional)",
+    stampsToAdd: "Number of stamps to add",
+    addStamp: "Add stamp",
+    done: "Done",
+    scanning: "Point the camera at the QR code…",
+    cameraError: "Could not start camera",
+    success: "Stamp added!",
+    customerFound: "Customer found",
+    lookupCustomer: "Look up customer",
+    currentStamps: "Stamps on card",
+    notFound: "Customer not found",
+    unauthorized: "Invalid staff key",
+    apiError: "Something went wrong. Try again.",
+    staffKeyPlaceholder: "Staff key",
+    startCamera: "Start camera",
+    stopCamera: "Stop camera",
+  },
+  ar: {
+    title: "مسح رمز العميل",
+    subtitle: "امسح رمز QR أو أدخل رقم الهاتف",
+    phonePlaceholder: "رقم الهاتف",
+    transactionPlaceholder: "رقم العملية (اختياري)",
+    stampsToAdd: "عدد الأختام للإضافة",
+    addStamp: "إضافة ختم",
+    done: "تم",
+    scanning: "وجّه الكاميرا نحو رمز QR…",
+    cameraError: "تعذر تشغيل الكاميرا",
+    success: "تمت إضافة الختم!",
+    customerFound: "تم العثور على العميل",
+    lookupCustomer: "البحث عن العميل",
+    currentStamps: "الأختام على البطاقة",
+    notFound: "العميل غير موجود",
+    unauthorized: "مفتاح الموظفين غير صالح",
+    apiError: "حدث خطأ. حاول مرة أخرى.",
+    staffKeyPlaceholder: "مفتاح الموظفين",
+    startCamera: "تشغيل الكاميرا",
+    stopCamera: "إيقاف الكاميرا",
+  },
+} as const;
+
+export type StaffCopy = (typeof staffTranslations)[Locale];
+
+export function getStaffCopy(locale: Locale): StaffCopy {
+  return staffTranslations[locale];
+}

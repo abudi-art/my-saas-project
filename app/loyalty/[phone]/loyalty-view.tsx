@@ -1,16 +1,22 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { CustomerQr } from "@/components/loyalty/customer-qr";
+import { StampGrid } from "@/components/loyalty/stamp-grid";
+import { WalletButtons } from "@/components/loyalty/wallet-buttons";
 import {
   BILCLEANIKEN_LOGO_URL,
   CARD_TARGET_POINTS,
   defaultLocale,
+  formatGreeting,
   getLoyaltyCopy,
+  isRtlLocale,
   locales,
   type Locale,
 } from "@/lib/i18n/loyalty";
-import { detectWalletPlatform, type WalletPlatform } from "@/lib/wallet/platform";
+import { getStampsOnCard, isCardComplete } from "@/lib/loyalty/stamps";
+import { createBrowserSupabaseClient } from "@/lib/supabase/client";
 
 type LoyaltyCustomer = {
   phone: string;
@@ -25,142 +31,116 @@ type LoyaltyViewProps = {
   configError?: boolean;
 };
 
-function WalletButtons({
-  phone,
-  copy,
-}: {
-  phone: string;
-  copy: ReturnType<typeof getLoyaltyCopy>;
-}) {
-  const [platform, setPlatform] = useState<WalletPlatform>("unknown");
-  const [loading, setLoading] = useState<WalletPlatform | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setPlatform(detectWalletPlatform(navigator.userAgent));
-  }, []);
-
-  async function enroll(targetPlatform: "apple" | "google") {
-    setLoading(targetPlatform);
-    setError(null);
-
-    try {
-      const response = await fetch("/api/wallet/enroll", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ phone, platform: targetPlatform }),
-      });
-
-      const contentType = response.headers.get("content-type") ?? "";
-
-      if (contentType.includes("application/vnd.apple.pkpass")) {
-        const blob = await response.blob();
-        const url = URL.createObjectURL(blob);
-        window.location.href = url;
-        return;
-      }
-
-      const data = await response.json();
-
-      if (data.saveUrl) {
-        window.location.href = data.saveUrl;
-        return;
-      }
-
-      if (!response.ok) {
-        setError(copy.walletError);
-      }
-    } catch {
-      setError(copy.walletError);
-    } finally {
-      setLoading(null);
-    }
-  }
-
-  const showApple = platform === "apple" || platform === "unknown";
-  const showGoogle = platform === "google" || platform === "unknown";
-
-  return (
-    <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-      <p className="mb-4 text-center text-sm text-gray-500">{copy.walletHint}</p>
-
-      <div className="flex flex-col gap-3">
-        {showApple && (
-          <button
-            type="button"
-            disabled={loading !== null}
-            onClick={() => enroll("apple")}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-black px-4 py-3 text-sm font-semibold text-white transition hover:bg-gray-900 disabled:opacity-60"
-          >
-            <span aria-hidden>🍎</span>
-            {loading === "apple" ? copy.walletLoading : copy.addToAppleWallet}
-          </button>
-        )}
-
-        {showGoogle && (
-          <button
-            type="button"
-            disabled={loading !== null}
-            onClick={() => enroll("google")}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm font-semibold text-gray-800 transition hover:bg-gray-50 disabled:opacity-60"
-          >
-            <span aria-hidden>G</span>
-            {loading === "google" ? copy.walletLoading : copy.addToGoogleWallet}
-          </button>
-        )}
-      </div>
-
-      {error && (
-        <p className="mt-3 text-center text-sm text-red-600" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
-  );
-}
-
 export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) {
   const [locale, setLocale] = useState<Locale>(defaultLocale);
-  const copy = getLoyaltyCopy(locale);
+  const [points, setPoints] = useState(customer?.points ?? 0);
+  const [animatingStamp, setAnimatingStamp] = useState<number | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
+  const prevPointsRef = useRef(points);
 
+  const copy = getLoyaltyCopy(locale);
+  const rtl = isRtlLocale(locale);
   const notFound = configError || !customer;
-  const currentPoints = customer?.points ?? 0;
-  const progressPercent = Math.min(
-    (currentPoints / CARD_TARGET_POINTS) * 100,
-    100,
-  );
-  const cardComplete = currentPoints >= CARD_TARGET_POINTS;
+  const canonicalPhone = customer?.phone ?? phone;
   const customerName =
     typeof customer?.customer_name === "string"
       ? customer.customer_name
       : undefined;
+  const stampsOnCard = getStampsOnCard(points);
+  const cardComplete = isCardComplete(points);
+
+  useEffect(() => {
+    setPoints(customer?.points ?? 0);
+    prevPointsRef.current = customer?.points ?? 0;
+  }, [customer?.points]);
+
+  useEffect(() => {
+    if (!customer?.phone) return;
+
+    let supabase;
+    try {
+      supabase = createBrowserSupabaseClient();
+    } catch {
+      return;
+    }
+
+    const channel = supabase
+      .channel(`loyalty:${customer.phone}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "loyalty_data",
+          filter: `phone=eq.${customer.phone}`,
+        },
+        (payload) => {
+          const nextPoints =
+            typeof payload.new === "object" &&
+            payload.new !== null &&
+            "points" in payload.new
+              ? Number((payload.new as LoyaltyCustomer).points)
+              : null;
+
+          if (nextPoints === null || Number.isNaN(nextPoints)) return;
+
+          setPoints((prev) => {
+            if (nextPoints > prev) {
+              const nextStampIndex = Math.min(nextPoints, CARD_TARGET_POINTS) - 1;
+              setAnimatingStamp(nextStampIndex);
+              setToast(copy.stampAdded);
+              window.setTimeout(() => setAnimatingStamp(null), 900);
+              window.setTimeout(() => setToast(null), 2500);
+
+              if (
+                nextPoints % CARD_TARGET_POINTS === 0 &&
+                nextPoints >= CARD_TARGET_POINTS
+              ) {
+                setShowCelebration(true);
+                window.setTimeout(() => setShowCelebration(false), 1800);
+              }
+            }
+            prevPointsRef.current = nextPoints;
+            return nextPoints;
+          });
+        },
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [customer?.phone, copy.stampAdded]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-gray-50 to-blue-50">
-      <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-8 sm:px-6">
-        <div className="mb-6 flex justify-center">
+    <div
+      className="loyalty-page min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-blue-50"
+      dir={rtl ? "rtl" : "ltr"}
+    >
+      {toast && (
+        <div className="stamp-toast fixed start-1/2 top-6 z-50 -translate-x-1/2 rounded-full bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-lg">
+          {toast}
+        </div>
+      )}
+
+      {showCelebration && (
+        <div className="celebration-overlay pointer-events-none fixed inset-0 z-40" aria-hidden />
+      )}
+
+      <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6 sm:px-6">
+        <div className="mb-5 flex items-center justify-between gap-4">
           <Image
             src={BILCLEANIKEN_LOGO_URL}
             alt={copy.brandName}
-            width={180}
-            height={48}
-            className="h-10 w-auto sm:h-12"
+            width={160}
+            height={44}
+            className="h-9 w-auto"
             priority
           />
-        </div>
-
-        <header className="mb-8 flex items-center justify-between gap-4">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
-              {copy.tagline}
-            </p>
-            <h1 className="mt-1 text-2xl font-bold text-slate-900">
-              {copy.brandName}
-            </h1>
-          </div>
 
           <div
-            className="flex rounded-lg border border-gray-200 bg-white p-1 shadow-sm"
+            className="flex rounded-xl border border-slate-200 bg-white p-1 shadow-sm"
             role="group"
             aria-label="Language"
           >
@@ -169,10 +149,10 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
                 key={code}
                 type="button"
                 onClick={() => setLocale(code)}
-                className={`rounded-md px-3 py-1.5 text-xs font-semibold transition ${
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
                   locale === code
                     ? "bg-blue-700 text-white shadow-sm"
-                    : "text-gray-500 hover:bg-gray-100 hover:text-gray-800"
+                    : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
                 }`}
                 aria-pressed={locale === code}
               >
@@ -180,11 +160,11 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
               </button>
             ))}
           </div>
-        </header>
+        </div>
 
         {notFound ? (
           <section className="flex flex-1 flex-col items-center justify-center">
-            <div className="w-full rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-lg">
+            <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg">
               <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
                 <svg
                   className="h-7 w-7 text-blue-600"
@@ -204,87 +184,73 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
               <h2 className="text-xl font-semibold text-slate-900">
                 {copy.customerNotFound}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-gray-500">
+              <p className="mt-3 text-sm leading-relaxed text-slate-500">
                 {copy.customerNotFoundHint}
               </p>
-              <p className="mt-5 text-xs text-gray-400">
+              <p className="mt-5 text-xs text-slate-400">
                 {copy.phoneLabel}: {phone}
               </p>
             </div>
           </section>
         ) : (
-          <section className="flex flex-1 flex-col justify-center gap-5">
-            <article className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-xl shadow-blue-900/5">
-              <div className="border-b border-gray-100 bg-blue-700 px-6 py-4">
-                {customerName && (
-                  <p className="text-lg font-semibold text-white">
-                    {customerName}
+          <section className="flex flex-1 flex-col gap-5 pb-8">
+            <article className="rounded-3xl bg-gradient-to-br from-blue-700 to-blue-900 p-6 text-white shadow-xl shadow-blue-900/20">
+              <p className="text-xs font-semibold uppercase tracking-widest text-blue-200">
+                {copy.tagline}
+              </p>
+              <h1 className="mt-2 text-2xl font-bold">
+                {formatGreeting(copy, customerName)}
+              </h1>
+              <p className="mt-2 text-sm text-blue-100">
+                {cardComplete
+                  ? copy.rewardUnlocked
+                  : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
+              </p>
+              <div className="mt-4 flex items-end justify-between gap-4">
+                <div>
+                  <p className="text-[10px] uppercase tracking-wider text-blue-200">
+                    {copy.totalPoints}
                   </p>
-                )}
-                <p className="text-xs font-medium uppercase tracking-wider text-blue-100">
-                  {copy.phoneLabel}
-                </p>
-                <p className="mt-1 font-mono text-lg text-white">{phone}</p>
-              </div>
-
-              <div className="px-6 py-10 text-center">
-                <p className="text-sm font-semibold uppercase tracking-widest text-gray-400">
-                  {copy.yourPoints}
-                </p>
-                <p className="mt-4 text-8xl font-bold tabular-nums tracking-tight text-blue-800">
-                  {currentPoints}
-                </p>
-                <p className="mt-2 text-base font-medium text-gray-500">
-                  {copy.pointsUnit}
-                </p>
-
-                <div className="mt-8 text-left">
-                  <div className="mb-2 flex items-center justify-between text-sm">
-                    <span className="font-medium text-gray-600">
-                      {cardComplete ? copy.cardComplete : copy.cardGoal}
-                    </span>
-                    <span className="tabular-nums font-semibold text-blue-800">
-                      {Math.min(currentPoints, CARD_TARGET_POINTS)} /{" "}
-                      {CARD_TARGET_POINTS}
-                    </span>
-                  </div>
-                  <div
-                    className="h-3 overflow-hidden rounded-full bg-gray-200"
-                    role="progressbar"
-                    aria-valuenow={Math.min(currentPoints, CARD_TARGET_POINTS)}
-                    aria-valuemin={0}
-                    aria-valuemax={CARD_TARGET_POINTS}
-                    aria-label={copy.cardGoal}
-                  >
-                    <div
-                      className={`h-full rounded-full transition-all ${
-                        cardComplete ? "bg-green-500" : "bg-blue-600"
-                      }`}
-                      style={{ width: `${progressPercent}%` }}
-                    />
-                  </div>
+                  <p className="text-4xl font-bold tabular-nums">{points}</p>
+                </div>
+                <div className="text-end">
+                  <p className="text-[10px] uppercase tracking-wider text-blue-200">
+                    {copy.phoneLabel}
+                  </p>
+                  <p className="font-mono text-sm">{canonicalPhone}</p>
                 </div>
               </div>
             </article>
 
-            <WalletButtons phone={phone} copy={copy} />
+            <StampGrid
+              points={points}
+              copy={copy}
+              animatingIndex={animatingStamp}
+            />
 
-            <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+            <CustomerQr phone={canonicalPhone} copy={copy} />
+
+            <WalletButtons phone={canonicalPhone} copy={copy} />
+
+            <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h3 className="mb-3 text-sm font-semibold text-slate-900">
+                {copy.rulesTitle}
+              </h3>
               <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-sm text-gray-700">
+                <li className="flex items-center gap-3 text-sm text-slate-700">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-700">
                     +1
                   </span>
                   {copy.exteriorWash}
                 </li>
-                <li className="flex items-center gap-3 text-sm text-gray-700">
+                <li className="flex items-center gap-3 text-sm text-slate-700">
                   <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
                     +2
                   </span>
                   {copy.fullService}
                 </li>
               </ul>
-            </div>
+            </article>
           </section>
         )}
       </main>
