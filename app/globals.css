@@ -48,6 +48,76 @@ body {
 .loyalty-page {
   --stamp-filled: #334155;
   --stamp-reward: #10b981;
+  --loyalty-header-from: #1d4ed8;
+  --loyalty-header-to: #1e3a8a;
+}
+
+.loyalty-header-bar {
+  background: linear-gradient(
+    135deg,
+    var(--loyalty-header-from) 0%,
+    var(--loyalty-header-to) 100%
+  );
+  box-shadow:
+    0 10px 30px rgb(30 58 138 / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+.loyalty-hero-card {
+  background: linear-gradient(
+    135deg,
+    var(--loyalty-header-from) 0%,
+    var(--loyalty-header-to) 100%
+  );
+}
+
+.loyalty-logo-shell {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.55rem 0.9rem;
+  border-radius: 0.9rem;
+  background: #ffffff;
+  box-shadow:
+    0 4px 14px rgb(15 23 42 / 0.12),
+    0 0 0 1px rgb(255 255 255 / 0.65);
+}
+
+.loyalty-logo-image {
+  display: block;
+  object-fit: contain;
+}
+
+.loyalty-live-dot {
+  animation: loyalty-live-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes loyalty-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes stamp-grid-sync {
+  0% {
+    box-shadow: 0 0 0 0 rgb(16 185 129 / 0.45);
+  }
+  100% {
+    box-shadow: 0 0 0 14px rgb(16 185 129 / 0);
+  }
+}
+
+.stamp-grid-sync-pulse {
+  border-radius: 1.5rem;
+  animation: stamp-grid-sync 0.7s ease-out;
 }
 
 .stamp-slot-empty {
@@ -129,4 +199,13 @@ body {
 
 [dir="rtl"] .loyalty-page .text-left {
   text-align: right;
+}
+
+[dir="rtl"] .loyalty-logo-shell {
+  margin-inline-end: auto;
+  margin-inline-start: 0;
+}
+
+[dir="rtl"] .loyalty-page .loyalty-hero-card .flex-wrap {
+  direction: rtl;
 }

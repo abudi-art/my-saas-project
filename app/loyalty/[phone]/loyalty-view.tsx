@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CustomerQr } from "@/components/loyalty/customer-qr";
 import { StampGrid } from "@/components/loyalty/stamp-grid";
 import { WalletButtons } from "@/components/loyalty/wallet-buttons";
@@ -31,13 +31,104 @@ type LoyaltyViewProps = {
   configError?: boolean;
 };
 
+function LanguageSwitcher({
+  locale,
+  onChange,
+  variant = "light",
+}: {
+  locale: Locale;
+  onChange: (locale: Locale) => void;
+  variant?: "light" | "dark";
+}) {
+  const isLight = variant === "light";
+
+  return (
+    <div
+      className={`flex shrink-0 rounded-xl p-1 ${
+        isLight
+          ? "border border-white/20 bg-white/10 backdrop-blur-sm"
+          : "border border-slate-200 bg-white shadow-sm"
+      }`}
+      role="group"
+      aria-label="Language"
+    >
+      {locales.map(({ code, label }) => (
+        <button
+          key={code}
+          type="button"
+          onClick={() => onChange(code)}
+          className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold transition sm:px-3 ${
+            locale === code
+              ? isLight
+                ? "bg-white text-blue-800 shadow-sm"
+                : "bg-blue-700 text-white shadow-sm"
+              : isLight
+                ? "text-blue-100 hover:bg-white/10 hover:text-white"
+                : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+          }`}
+          aria-pressed={locale === code}
+        >
+          {label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function LoyaltyBrandHeader({
+  locale,
+  onLocaleChange,
+  copy,
+  variant = "standalone",
+}: {
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
+  copy: ReturnType<typeof getLoyaltyCopy>;
+  variant?: "standalone" | "embedded";
+}) {
+  const embedded = variant === "embedded";
+
+  return (
+    <div
+      className={`flex items-center justify-between gap-3 ${
+        embedded
+          ? "border-b border-white/10 px-4 py-3 sm:px-5 sm:py-4"
+          : "loyalty-header-bar rounded-3xl px-4 py-3 sm:px-5 sm:py-4"
+      }`}
+    >
+      <div className="loyalty-logo-shell min-w-0 flex-1">
+        <Image
+          src={BILCLEANIKEN_LOGO_URL}
+          alt={copy.brandName}
+          width={168}
+          height={48}
+          className="loyalty-logo-image h-8 w-auto max-w-full sm:h-9"
+          priority
+        />
+      </div>
+
+      <LanguageSwitcher
+        locale={locale}
+        onChange={onLocaleChange}
+        variant={embedded ? "light" : "dark"}
+      />
+    </div>
+  );
+}
+
 export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) {
   const [locale, setLocale] = useState<Locale>(defaultLocale);
   const [points, setPoints] = useState(customer?.points ?? 0);
   const [animatingStamp, setAnimatingStamp] = useState<number | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [stampGridPulse, setStampGridPulse] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+  const [liveConnected, setLiveConnected] = useState(false);
   const prevPointsRef = useRef(points);
+  const toastTimerRef = useRef<number | null>(null);
+  const animTimerRef = useRef<number | null>(null);
+  const pulseTimerRef = useRef<number | null>(null);
+  const celebrationTimerRef = useRef<number | null>(null);
 
   const copy = getLoyaltyCopy(locale);
   const rtl = isRtlLocale(locale);
@@ -49,6 +140,40 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
       : undefined;
   const stampsOnCard = getStampsOnCard(points);
   const cardComplete = isCardComplete(points);
+
+  const triggerStampFeedback = useCallback(
+    (prev: number, nextPoints: number) => {
+      if (nextPoints <= prev) return;
+
+      const stampIndex = getStampsOnCard(nextPoints) - 1;
+      setAnimatingStamp(stampIndex);
+      setStampGridPulse(true);
+      setToast(copy.stampAdded);
+
+      if (animTimerRef.current) window.clearTimeout(animTimerRef.current);
+      if (pulseTimerRef.current) window.clearTimeout(pulseTimerRef.current);
+      if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
+      if (celebrationTimerRef.current) {
+        window.clearTimeout(celebrationTimerRef.current);
+      }
+
+      animTimerRef.current = window.setTimeout(() => setAnimatingStamp(null), 900);
+      pulseTimerRef.current = window.setTimeout(() => setStampGridPulse(false), 700);
+      toastTimerRef.current = window.setTimeout(() => setToast(null), 2500);
+
+      if (
+        nextPoints % CARD_TARGET_POINTS === 0 &&
+        nextPoints >= CARD_TARGET_POINTS
+      ) {
+        setShowCelebration(true);
+        celebrationTimerRef.current = window.setTimeout(
+          () => setShowCelebration(false),
+          1800,
+        );
+      }
+    },
+    [copy.stampAdded],
+  );
 
   useEffect(() => {
     setPoints(customer?.points ?? 0);
@@ -86,32 +211,27 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
           if (nextPoints === null || Number.isNaN(nextPoints)) return;
 
           setPoints((prev) => {
-            if (nextPoints > prev) {
-              const nextStampIndex = Math.min(nextPoints, CARD_TARGET_POINTS) - 1;
-              setAnimatingStamp(nextStampIndex);
-              setToast(copy.stampAdded);
-              window.setTimeout(() => setAnimatingStamp(null), 900);
-              window.setTimeout(() => setToast(null), 2500);
-
-              if (
-                nextPoints % CARD_TARGET_POINTS === 0 &&
-                nextPoints >= CARD_TARGET_POINTS
-              ) {
-                setShowCelebration(true);
-                window.setTimeout(() => setShowCelebration(false), 1800);
-              }
-            }
+            triggerStampFeedback(prev, nextPoints);
             prevPointsRef.current = nextPoints;
             return nextPoints;
           });
         },
       )
-      .subscribe();
+      .subscribe((status) => {
+        setLiveConnected(status === "SUBSCRIBED");
+      });
 
     return () => {
+      setLiveConnected(false);
       void supabase.removeChannel(channel);
+      if (animTimerRef.current) window.clearTimeout(animTimerRef.current);
+      if (pulseTimerRef.current) window.clearTimeout(pulseTimerRef.current);
+      if (toastTimerRef.current) window.clearTimeout(toastTimerRef.current);
+      if (celebrationTimerRef.current) {
+        window.clearTimeout(celebrationTimerRef.current);
+      }
     };
-  }, [customer?.phone, copy.stampAdded]);
+  }, [customer?.phone, triggerStampFeedback]);
 
   return (
     <div
@@ -129,104 +249,111 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
       )}
 
       <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6 sm:px-6">
-        <div className="mb-5 flex items-center justify-between gap-4">
-          <Image
-            src={BILCLEANIKEN_LOGO_URL}
-            alt={copy.brandName}
-            width={160}
-            height={44}
-            className="h-9 w-auto"
-            priority
-          />
-
-          <div
-            className="flex rounded-xl border border-slate-200 bg-white p-1 shadow-sm"
-            role="group"
-            aria-label="Language"
-          >
-            {locales.map(({ code, label }) => (
-              <button
-                key={code}
-                type="button"
-                onClick={() => setLocale(code)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition ${
-                  locale === code
-                    ? "bg-blue-700 text-white shadow-sm"
-                    : "text-slate-500 hover:bg-slate-100 hover:text-slate-800"
-                }`}
-                aria-pressed={locale === code}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {notFound ? (
-          <section className="flex flex-1 flex-col items-center justify-center">
-            <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg">
-              <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
-                <svg
-                  className="h-7 w-7 text-blue-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  aria-hidden
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9A3.75 3.75 0 1 1 8.25 9m7.5 0a3.75 3.75 0 1 0-7.5 0M4.5 19.5a8.25 8.25 0 0 1 15 0"
-                  />
-                </svg>
+          <>
+            <LoyaltyBrandHeader
+              locale={locale}
+              onLocaleChange={setLocale}
+              copy={copy}
+            />
+
+            <section className="mt-5 flex flex-1 flex-col items-center justify-center">
+              <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 text-center shadow-lg">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
+                  <svg
+                    className="h-7 w-7 text-blue-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    aria-hidden
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 9A3.75 3.75 0 1 1 8.25 9m7.5 0a3.75 3.75 0 1 0-7.5 0M4.5 19.5a8.25 8.25 0 0 1 15 0"
+                    />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-semibold text-slate-900">
+                  {copy.customerNotFound}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-500">
+                  {copy.customerNotFoundHint}
+                </p>
+                <p className="mt-5 text-xs text-slate-400">
+                  {copy.phoneLabel}: {phone}
+                </p>
               </div>
-              <h2 className="text-xl font-semibold text-slate-900">
-                {copy.customerNotFound}
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-slate-500">
-                {copy.customerNotFoundHint}
-              </p>
-              <p className="mt-5 text-xs text-slate-400">
-                {copy.phoneLabel}: {phone}
-              </p>
-            </div>
-          </section>
+            </section>
+          </>
         ) : (
           <section className="flex flex-1 flex-col gap-5 pb-8">
-            <article className="rounded-3xl bg-gradient-to-br from-blue-700 to-blue-900 p-6 text-white shadow-xl shadow-blue-900/20">
-              <p className="text-xs font-semibold uppercase tracking-widest text-blue-200">
-                {copy.tagline}
-              </p>
-              <h1 className="mt-2 text-2xl font-bold">
-                {formatGreeting(copy, customerName)}
-              </h1>
-              <p className="mt-2 text-sm text-blue-100">
-                {cardComplete
-                  ? copy.rewardUnlocked
-                  : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
-              </p>
-              <div className="mt-4 flex items-end justify-between gap-4">
-                <div>
-                  <p className="text-[10px] uppercase tracking-wider text-blue-200">
-                    {copy.totalPoints}
+            <article className="loyalty-hero-card overflow-hidden rounded-3xl shadow-xl shadow-blue-900/20">
+              <LoyaltyBrandHeader
+                locale={locale}
+                onLocaleChange={setLocale}
+                copy={copy}
+                variant="embedded"
+              />
+
+              <div className="bg-gradient-to-br from-blue-700 to-blue-900 px-4 pb-6 pt-4 text-white sm:px-6 sm:pb-7">
+                <div className="mb-4 flex items-center justify-between gap-3">
+                  <p className="text-xs font-semibold uppercase tracking-widest text-blue-200">
+                    {copy.tagline}
                   </p>
-                  <p className="text-4xl font-bold tabular-nums">{points}</p>
+                  {liveConnected && (
+                    <span
+                      className="loyalty-live-badge inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-200 ring-1 ring-emerald-400/30"
+                      aria-live="polite"
+                    >
+                      <span className="loyalty-live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      {copy.liveSync}
+                    </span>
+                  )}
                 </div>
-                <div className="text-end">
-                  <p className="text-[10px] uppercase tracking-wider text-blue-200">
-                    {copy.phoneLabel}
-                  </p>
-                  <p className="font-mono text-sm">{canonicalPhone}</p>
+
+                <h1 className="text-2xl font-bold leading-tight sm:text-[1.65rem]">
+                  {formatGreeting(copy, customerName)}
+                </h1>
+                <p className="mt-2 text-sm text-blue-100">
+                  {cardComplete
+                    ? copy.rewardUnlocked
+                    : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
+                </p>
+
+                <div className="mt-5 flex flex-wrap items-end justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-wider text-blue-200">
+                      {copy.totalPoints}
+                    </p>
+                    <p className="text-4xl font-bold tabular-nums">{points}</p>
+                  </div>
+                  <div className="text-end">
+                    <p className="text-[10px] uppercase tracking-wider text-blue-200">
+                      {copy.stampsLabel}
+                    </p>
+                    <p className="text-2xl font-bold tabular-nums">
+                      {stampsOnCard}/{CARD_TARGET_POINTS}
+                    </p>
+                  </div>
+                  <div className="w-full border-t border-white/10 pt-4 text-end sm:w-auto sm:border-0 sm:pt-0">
+                    <p className="text-[10px] uppercase tracking-wider text-blue-200">
+                      {copy.phoneLabel}
+                    </p>
+                    <p className="font-mono text-sm">{canonicalPhone}</p>
+                  </div>
                 </div>
               </div>
             </article>
 
-            <StampGrid
-              points={points}
-              copy={copy}
-              animatingIndex={animatingStamp}
-            />
+            <div className={stampGridPulse ? "stamp-grid-sync-pulse" : undefined}>
+              <StampGrid
+                points={points}
+                copy={copy}
+                animatingIndex={animatingStamp}
+              />
+            </div>
 
             <CustomerQr phone={canonicalPhone} copy={copy} />
 
