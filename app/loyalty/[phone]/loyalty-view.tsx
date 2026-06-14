@@ -68,14 +68,15 @@ function HeroHeaderRow({
   copy: ReturnType<typeof getLoyaltyCopy>;
 }) {
   return (
-    <header className="loyalty-top-bar">
-      <div className="loyalty-logo-badge-wrap">
+    <header className="flex w-full items-center justify-between gap-3 border-b border-white/10 bg-[#002D5B] px-5 py-4 sm:px-6">
+      <div className="flex shrink-0 items-center justify-center rounded-[10px] border border-white/15 bg-[#001A38] px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_4px_14px_rgba(0,0,0,0.25)]">
         <Image
           src={BILCLEANIKEN_BADGE_URL}
           alt={copy.brandName}
           width={176}
           height={52}
-          className="loyalty-logo-official h-9 w-auto sm:h-10"
+          unoptimized
+          className="loyalty-logo-official block h-9 w-auto max-w-[10.5rem] sm:h-10"
           priority
         />
       </div>
@@ -203,7 +204,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
 
   return (
     <div
-      className="loyalty-page"
+      className="loyalty-page min-h-screen bg-[#f8fafc]"
       dir={rtl ? "rtl" : "ltr"}
     >
       {toast && (
@@ -219,7 +220,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
       <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6 sm:px-6">
         {notFound ? (
           <>
-            <article className="loyalty-hero-card overflow-hidden rounded-3xl shadow-xl shadow-blue-900/20">
+            <article className="overflow-hidden rounded-3xl bg-[#002D5B] shadow-xl shadow-blue-900/25">
               <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
@@ -259,62 +260,62 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
           </>
         ) : (
           <section className="flex flex-1 flex-col gap-4 pb-8">
-            <article className="loyalty-hero-card overflow-hidden rounded-3xl shadow-xl shadow-blue-900/20">
+            <article className="overflow-hidden rounded-3xl bg-[#002D5B] shadow-xl shadow-blue-900/25">
               <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
                 copy={copy}
               />
 
-              <div className="loyalty-hero-body text-white">
+              <div className="bg-gradient-to-b from-[#003d7a] to-[#002244] px-5 pb-6 pt-5 text-white sm:px-6">
                 <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-200/90">
-                  {copy.tagline}
+                  <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-100/90">
+                    {copy.tagline}
+                  </p>
+                  {liveConnected && (
+                    <span
+                      className="loyalty-live-badge inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-emerald-200 ring-1 ring-emerald-400/30"
+                      aria-live="polite"
+                    >
+                      <span className="loyalty-live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      {copy.liveSync}
+                    </span>
+                  )}
+                </div>
+
+                <h1 className="mt-4 text-2xl font-semibold leading-tight tracking-tight sm:text-[1.65rem]">
+                  {formatGreeting(copy, customerName)}
+                </h1>
+                <p className="mt-2 text-sm font-medium text-blue-100/90">
+                  {cardComplete
+                    ? copy.rewardUnlocked
+                    : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
                 </p>
-                {liveConnected && (
-                  <span
-                    className="loyalty-live-badge inline-flex shrink-0 items-center gap-1.5 rounded-full bg-emerald-500/20 px-2.5 py-1 text-[10px] font-medium uppercase tracking-wide text-emerald-200 ring-1 ring-emerald-400/30"
-                    aria-live="polite"
-                  >
-                    <span className="loyalty-live-dot h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    {copy.liveSync}
-                  </span>
-                )}
-              </div>
 
-              <h1 className="mt-4 text-2xl font-semibold leading-tight tracking-tight sm:text-[1.65rem]">
-                {formatGreeting(copy, customerName)}
-              </h1>
-              <p className="mt-2 text-sm font-medium text-blue-100/90">
-                {cardComplete
-                  ? copy.rewardUnlocked
-                  : `${stampsOnCard}/${CARD_TARGET_POINTS} — ${copy.collectStamps}`}
-              </p>
-
-              <div className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-t border-white/10 pt-5">
-                <div>
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
-                    {copy.totalPoints}
-                  </p>
-                  <p className="text-4xl font-semibold tabular-nums tracking-tight">
-                    {points}
-                  </p>
+                <div className="mt-6 flex flex-wrap items-end justify-between gap-x-6 gap-y-4 border-t border-white/10 pt-5">
+                  <div>
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
+                      {copy.totalPoints}
+                    </p>
+                    <p className="text-4xl font-semibold tabular-nums tracking-tight">
+                      {points}
+                    </p>
+                  </div>
+                  <div className="text-end">
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
+                      {copy.stampsLabel}
+                    </p>
+                    <p className="text-2xl font-semibold tabular-nums tracking-tight">
+                      {stampsOnCard}/{CARD_TARGET_POINTS}
+                    </p>
+                  </div>
+                  <div className="w-full text-end sm:w-auto">
+                    <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
+                      {copy.phoneLabel}
+                    </p>
+                    <p className="font-mono text-sm font-medium">{canonicalPhone}</p>
+                  </div>
                 </div>
-                <div className="text-end">
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
-                    {copy.stampsLabel}
-                  </p>
-                  <p className="text-2xl font-semibold tabular-nums tracking-tight">
-                    {stampsOnCard}/{CARD_TARGET_POINTS}
-                  </p>
-                </div>
-                <div className="w-full text-end sm:w-auto">
-                  <p className="text-[10px] font-medium uppercase tracking-wider text-blue-200/80">
-                    {copy.phoneLabel}
-                  </p>
-                  <p className="font-mono text-sm font-medium">{canonicalPhone}</p>
-                </div>
-              </div>
               </div>
             </article>
 

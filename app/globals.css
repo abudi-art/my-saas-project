@@ -71,7 +71,7 @@ body {
   justify-content: space-between;
   gap: 1rem;
   padding: 1rem 1.25rem;
-  background: var(--loyalty-bar);
+  background-color: #002d5b;
   border-bottom: 1px solid rgb(255 255 255 / 0.08);
 }
 
@@ -80,7 +80,7 @@ body {
   align-items: center;
   justify-content: center;
   padding: 0.625rem 1rem;
-  background: var(--loyalty-badge-bg);
+  background-color: #001a38;
   border: 1px solid rgb(255 255 255 / 0.14);
   border-radius: 10px;
   box-shadow:
@@ -132,7 +132,7 @@ body {
 }
 
 .loyalty-lang-btn--active {
-  background: var(--loyalty-bar);
+  background-color: #002d5b;
   color: #ffffff;
   box-shadow: 0 1px 3px rgb(0 0 0 / 0.18);
 }
