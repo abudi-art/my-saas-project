@@ -1,7 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import {
+  BILCLEANIKEN_LOGO_URL,
+  CARD_TARGET_POINTS,
   defaultLocale,
   getLoyaltyCopy,
   locales,
@@ -25,10 +28,27 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
   const copy = getLoyaltyCopy(locale);
 
   const notFound = configError || !customer;
+  const currentPoints = customer?.points ?? 0;
+  const progressPercent = Math.min(
+    (currentPoints / CARD_TARGET_POINTS) * 100,
+    100,
+  );
+  const cardComplete = currentPoints >= CARD_TARGET_POINTS;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-100 via-gray-50 to-blue-50">
       <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-8 sm:px-6">
+        <div className="mb-6 flex justify-center">
+          <Image
+            src={BILCLEANIKEN_LOGO_URL}
+            alt={copy.brandName}
+            width={180}
+            height={48}
+            className="h-10 w-auto sm:h-12"
+            priority
+          />
+        </div>
+
         <header className="mb-8 flex items-center justify-between gap-4">
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-blue-600">
@@ -102,30 +122,57 @@ export function LoyaltyView({ phone, customer, configError }: LoyaltyViewProps) 
                 <p className="mt-1 font-mono text-lg text-white">{phone}</p>
               </div>
 
-              <div className="px-6 py-12 text-center">
+              <div className="px-6 py-10 text-center">
                 <p className="text-sm font-semibold uppercase tracking-widest text-gray-400">
                   {copy.yourPoints}
                 </p>
                 <p className="mt-4 text-8xl font-bold tabular-nums tracking-tight text-blue-800">
-                  {customer.points}
+                  {currentPoints}
                 </p>
                 <p className="mt-2 text-base font-medium text-gray-500">
                   {copy.pointsUnit}
                 </p>
+
+                <div className="mt-8 text-left">
+                  <div className="mb-2 flex items-center justify-between text-sm">
+                    <span className="font-medium text-gray-600">
+                      {cardComplete ? copy.cardComplete : copy.cardGoal}
+                    </span>
+                    <span className="tabular-nums font-semibold text-blue-800">
+                      {Math.min(currentPoints, CARD_TARGET_POINTS)} /{" "}
+                      {CARD_TARGET_POINTS}
+                    </span>
+                  </div>
+                  <div
+                    className="h-3 overflow-hidden rounded-full bg-gray-200"
+                    role="progressbar"
+                    aria-valuenow={Math.min(currentPoints, CARD_TARGET_POINTS)}
+                    aria-valuemin={0}
+                    aria-valuemax={CARD_TARGET_POINTS}
+                    aria-label={copy.cardGoal}
+                  >
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        cardComplete ? "bg-green-500" : "bg-blue-600"
+                      }`}
+                      style={{ width: `${progressPercent}%` }}
+                    />
+                  </div>
+                </div>
               </div>
             </article>
 
             <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
               <ul className="space-y-3">
                 <li className="flex items-center gap-3 text-sm text-gray-700">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-700">
-                    ✦
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-sm font-bold text-blue-700">
+                    +1
                   </span>
                   {copy.exteriorWash}
                 </li>
                 <li className="flex items-center gap-3 text-sm text-gray-700">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600">
-                    ✦
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-sm font-bold text-slate-700">
+                    +2
                   </span>
                   {copy.fullService}
                 </li>

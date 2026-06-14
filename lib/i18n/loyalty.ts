@@ -1,5 +1,9 @@
 export type Locale = "sv" | "en" | "da";
 
+export const CARD_TARGET_POINTS = 12;
+export const EXTERIOR_WASH_POINTS = 1;
+export const FULL_SERVICE_POINTS = 2;
+
 export const locales: { code: Locale; label: string }[] = [
   { code: "sv", label: "SV" },
   { code: "en", label: "EN" },
@@ -8,13 +12,18 @@ export const locales: { code: Locale; label: string }[] = [
 
 export const defaultLocale: Locale = "sv";
 
+export const BILCLEANIKEN_LOGO_URL =
+  "https://www.bilcleaniken.se/wp-content/uploads/2020/11/logo.svg";
+
 export const loyaltyTranslations = {
   sv: {
-    brandName: "SparkleWash",
-    tagline: "Premium biltvätt",
+    brandName: "Bilcleaniken",
+    tagline: "Biltvätt i Malmö",
     yourPoints: "Dina poäng",
     pointsUnit: "poäng",
-    exteriorWash: "Utvändig tvätt: 12 poäng",
+    cardGoal: "12 poäng för att fylla kortet",
+    cardComplete: "Kortet är klart — dags för belöning!",
+    exteriorWash: "Utvändig tvätt: 1 poäng",
     fullService: "Fullservice: 2 poäng",
     customerNotFound: "Kunden hittades inte",
     customerNotFoundHint:
@@ -23,11 +32,13 @@ export const loyaltyTranslations = {
     phoneLabel: "Telefon",
   },
   en: {
-    brandName: "SparkleWash",
-    tagline: "Premium car wash",
+    brandName: "Bilcleaniken",
+    tagline: "Car wash in Malmö",
     yourPoints: "Your points",
     pointsUnit: "points",
-    exteriorWash: "Exterior Wash: 12 points",
+    cardGoal: "12 points to complete your card",
+    cardComplete: "Card complete — reward unlocked!",
+    exteriorWash: "Exterior Wash: 1 point",
     fullService: "Full Service: 2 points",
     customerNotFound: "Customer not found",
     customerNotFoundHint:
@@ -36,11 +47,13 @@ export const loyaltyTranslations = {
     phoneLabel: "Phone",
   },
   da: {
-    brandName: "SparkleWash",
-    tagline: "Premium bilvask",
+    brandName: "Bilcleaniken",
+    tagline: "Bilvask i Malmø",
     yourPoints: "Dine point",
     pointsUnit: "point",
-    exteriorWash: "Udvendig vask: 12 point",
+    cardGoal: "12 point for at udfylde kortet",
+    cardComplete: "Kortet er fuldt — belønning klar!",
+    exteriorWash: "Udvendig vask: 1 point",
     fullService: "Fuld service: 2 point",
     customerNotFound: "Kunden blev ikke fundet",
     customerNotFoundHint:
