@@ -30,6 +30,11 @@ export const loyaltyTranslations = {
       "Vi kunde tyvärr inte hitta något lojalitetskonto kopplat till detta nummer. Kontakta oss gärna vid frågor.",
     loading: "Laddar…",
     phoneLabel: "Telefon",
+    addToAppleWallet: "Lägg till i Apple Wallet",
+    addToGoogleWallet: "Lägg till i Google Wallet",
+    walletHint: "Spara kortet i mobilen — poängen uppdateras automatiskt.",
+    walletLoading: "Förbereder kort…",
+    walletError: "Kunde inte skapa plånbokskort. Försök igen senare.",
   },
   en: {
     brandName: "Bilcleaniken",
@@ -45,6 +50,11 @@ export const loyaltyTranslations = {
       "We couldn't find a loyalty account linked to this number. Feel free to contact us if you need help.",
     loading: "Loading…",
     phoneLabel: "Phone",
+    addToAppleWallet: "Add to Apple Wallet",
+    addToGoogleWallet: "Add to Google Wallet",
+    walletHint: "Save the card to your phone — points update automatically.",
+    walletLoading: "Preparing pass…",
+    walletError: "Could not create wallet pass. Please try again later.",
   },
   da: {
     brandName: "Bilcleaniken",
@@ -60,6 +70,11 @@ export const loyaltyTranslations = {
       "Vi kunne desværre ikke finde en loyalitetskonto til dette nummer. Kontakt os gerne, hvis du har brug for hjælp.",
     loading: "Indlæser…",
     phoneLabel: "Telefon",
+    addToAppleWallet: "Tilføj til Apple Wallet",
+    addToGoogleWallet: "Tilføj til Google Wallet",
+    walletHint: "Gem kortet på telefonen — point opdateres automatisk.",
+    walletLoading: "Forbereder kort…",
+    walletError: "Kunne ikke oprette tegnebogskort. Prøv igen senere.",
   },
 } as const;
 
