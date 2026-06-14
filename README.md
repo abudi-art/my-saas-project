@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# B2B Loyalty SaaS
 
-## Getting Started
+Multi-merchant stamp loyalty platform (Phase 1 foundation) built with Next.js 16, Prisma 7, and Supabase PostgreSQL.
 
-First, run the development server:
+## Features
+
+- Merchant API key authentication
+- Pass creation and stamp scan API
+- Audit log (`StampEvent`) for every scan
+- Wallet update hook stub (Phase 2: Apple PassKit / Google Wallet)
+
+## Local development
 
 ```bash
+cp .env.example .env   # add your Supabase credentials
+npm install
+npm run db:migrate
+npm run db:seed
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000/api/health](http://localhost:3000/api/health) — expect `{"status":"ok"}`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+See [docs/api-testing.md](./docs/api-testing.md) for curl examples.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Deployment
 
-## Learn More
+Deploy to Vercel with Supabase env vars (`DATABASE_URL`, `DIRECT_URL`). Full steps:
 
-To learn more about Next.js, take a look at the following resources:
+**[docs/deployment.md](./docs/deployment.md)**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Scripts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Generate client, run migrations, production build |
+| `npm run db:migrate` | Apply migrations locally (dev) |
+| `npm run db:migrate:deploy` | Apply migrations (production/CI) |
+| `npm run db:seed` | Seed demo merchant and passes |
+| `npm run db:studio` | Open Prisma Studio |
 
-## Deploy on Vercel
+## API routes
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Method | Path | Auth |
+|--------|------|------|
+| GET | `/api/health` | None |
+| POST | `/api/passes` | API key |
+| GET | `/api/passes/[passId]` | API key |
+| POST | `/api/stamps/scan` | API key |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Tech stack
+
+- Next.js 16 (App Router)
+- Prisma 7 + `@prisma/adapter-pg`
+- PostgreSQL (Supabase)
+- Tailwind CSS 4
+- Zod validation

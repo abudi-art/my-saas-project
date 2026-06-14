@@ -1,0 +1,57 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Merchant {
+  id              String           @id @default(uuid())
+  businessName    String
+  slug            String           @unique
+  apiKey          String           @unique
+  createdAt       DateTime         @default(now())
+  loyaltyPrograms LoyaltyProgram[]
+  stampEvents     StampEvent[]
+}
+
+model LoyaltyProgram {
+  id                String   @id @default(uuid())
+  merchant          Merchant @relation(fields: [merchantId], references: [id])
+  merchantId        String
+  programName       String
+  stampThreshold    Int
+  rewardDescription String?
+  passes            Pass[]
+}
+
+model Pass {
+  id                        String         @id @default(uuid())
+  program                   LoyaltyProgram @relation(fields: [programId], references: [id])
+  programId                 String
+  customerIdentifier        String
+  applePushToken            String?
+  deviceLibraryIdentifier   String?
+  googleObjectId            String?
+  stampCount                Int            @default(0)
+  pushNotificationsEnabled  Boolean        @default(true)
+  lastVisitedAt             DateTime       @default(now())
+  updatedAt                 DateTime       @updatedAt
+  stampEvents               StampEvent[]
+
+  @@unique([programId, customerIdentifier])
+  @@index([lastVisitedAt])
+}
+
+model StampEvent {
+  id         String   @id @default(uuid())
+  pass       Pass     @relation(fields: [passId], references: [id])
+  passId     String
+  merchant   Merchant @relation(fields: [merchantId], references: [id])
+  merchantId String
+  stampedAt  DateTime @default(now())
+
+  @@index([merchantId, stampedAt])
+}
