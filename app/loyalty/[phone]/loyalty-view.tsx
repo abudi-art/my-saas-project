@@ -32,6 +32,9 @@ type LoyaltyViewProps = {
   appUrl?: string;
 };
 
+const LOYALTY_BAR = "#002D5B";
+const LOYALTY_BADGE = "#001A38";
+
 function LanguageSwitcher({
   locale,
   onChange,
@@ -40,14 +43,23 @@ function LanguageSwitcher({
   onChange: (locale: Locale) => void;
 }) {
   return (
-    <div className="loyalty-lang-switcher" role="group" aria-label="Language">
+    <div
+      className="flex shrink-0 items-center gap-0.5 rounded-full border border-slate-200 bg-white p-1 shadow-[0_2px_8px_rgba(15,23,42,0.12)]"
+      role="group"
+      aria-label="Language"
+    >
       {locales.map(({ code, label }) => (
         <button
           key={code}
           type="button"
           onClick={() => onChange(code)}
-          className={
-            locale === code ? "loyalty-lang-btn loyalty-lang-btn--active" : "loyalty-lang-btn"
+          className={`rounded-full px-2.5 py-1.5 text-xs font-medium transition sm:px-3 ${
+            locale === code
+              ? "text-white shadow-sm"
+              : "text-slate-600 hover:bg-slate-100"
+          }`}
+          style={
+            locale === code ? { backgroundColor: LOYALTY_BAR } : undefined
           }
           aria-pressed={locale === code}
         >
@@ -68,15 +80,25 @@ function HeroHeaderRow({
   copy: ReturnType<typeof getLoyaltyCopy>;
 }) {
   return (
-    <header className="flex w-full items-center justify-between gap-3 border-b border-white/10 bg-[#002D5B] px-5 py-4 sm:px-6">
-      <div className="flex shrink-0 items-center justify-center rounded-[10px] border border-white/15 bg-[#001A38] px-4 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_4px_14px_rgba(0,0,0,0.25)]">
+    <header
+      className="flex w-full items-center justify-between gap-3 border-b border-white/10 px-5 py-4 sm:px-6"
+      style={{ backgroundColor: LOYALTY_BAR }}
+    >
+      <div
+        className="flex shrink-0 items-center justify-center rounded-[10px] border border-white/15 px-4 py-2.5"
+        style={{
+          backgroundColor: LOYALTY_BADGE,
+          boxShadow:
+            "inset 0 1px 0 rgba(255,255,255,0.12), 0 4px 14px rgba(0,0,0,0.25)",
+        }}
+      >
         <Image
           src={BILCLEANIKEN_BADGE_URL}
           alt={copy.brandName}
           width={176}
           height={52}
           unoptimized
-          className="loyalty-logo-official block h-9 w-auto max-w-[10.5rem] sm:h-10"
+          className="block h-9 w-auto max-w-[10.5rem] object-contain sm:h-10"
           priority
         />
       </div>
@@ -204,7 +226,8 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
 
   return (
     <div
-      className="loyalty-page min-h-screen bg-[#f8fafc]"
+      className="loyalty-page min-h-screen"
+      style={{ backgroundColor: "#f8fafc" }}
       dir={rtl ? "rtl" : "ltr"}
     >
       {toast && (
@@ -220,7 +243,10 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
       <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 py-6 sm:px-6">
         {notFound ? (
           <>
-            <article className="overflow-hidden rounded-3xl bg-[#002D5B] shadow-xl shadow-blue-900/25">
+            <article
+              className="overflow-hidden rounded-3xl shadow-xl shadow-blue-900/25"
+              style={{ backgroundColor: LOYALTY_BAR }}
+            >
               <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
@@ -260,14 +286,22 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
           </>
         ) : (
           <section className="flex flex-1 flex-col gap-4 pb-8">
-            <article className="overflow-hidden rounded-3xl bg-[#002D5B] shadow-xl shadow-blue-900/25">
+            <article
+              className="overflow-hidden rounded-3xl shadow-xl shadow-blue-900/25"
+              style={{ backgroundColor: LOYALTY_BAR }}
+            >
               <HeroHeaderRow
                 locale={locale}
                 onLocaleChange={setLocale}
                 copy={copy}
               />
 
-              <div className="bg-gradient-to-b from-[#003d7a] to-[#002244] px-5 pb-6 pt-5 text-white sm:px-6">
+              <div
+                className="px-5 pb-6 pt-5 text-white sm:px-6"
+                style={{
+                  background: "linear-gradient(180deg, #003d7a 0%, #002244 100%)",
+                }}
+              >
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-blue-100/90">
                     {copy.tagline}
