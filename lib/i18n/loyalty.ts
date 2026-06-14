@@ -15,6 +15,9 @@ export const defaultLocale: Locale = "sv";
 export const BILCLEANIKEN_LOGO_URL =
   "https://www.bilcleaniken.se/wp-content/uploads/2020/11/logo.svg";
 
+/** Official rectangular badge (navy + border + car mark) for loyalty UI. */
+export const BILCLEANIKEN_BADGE_URL = "/branding/bilcleaniken-logo-badge.png";
+
 export const loyaltyTranslations = {
   sv: {
     brandName: "Bilcleaniken",

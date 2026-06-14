@@ -41,15 +41,17 @@ body {
   height: 1.25rem;
   transform: translate(-50%, -50%);
   border-radius: 0 0 9999px 9999px;
-  background: rgb(248 250 252);
+  background: #f3f4f6;
   box-shadow: inset 0 -1px 0 rgb(148 163 184 / 0.25);
 }
 
 .loyalty-page {
   --stamp-filled: #334155;
   --stamp-reward: #10b981;
-  --loyalty-header-from: #1d4ed8;
-  --loyalty-header-to: #1e3a8a;
+  --loyalty-header-from: #004080;
+  --loyalty-header-to: #002244;
+  min-height: 100vh;
+  background-color: #f3f4f6;
 }
 
 .loyalty-header-bar {
@@ -71,25 +73,21 @@ body {
   );
 }
 
-.loyalty-logo-badge {
-  display: inline-flex;
+.loyalty-logo-container {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 10px 16px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #002244 0%, #003366 100%);
-  border: 1px solid rgb(255 255 255 / 0.18);
-  box-shadow:
-    inset 0 1px 0 rgb(255 255 255 / 0.12),
-    0 4px 12px rgb(0 0 0 / 0.22);
+  justify-content: space-between;
+  gap: 1rem;
+  background: transparent;
 }
 
-.loyalty-logo-badge-image {
+.loyalty-logo-official {
   display: block;
-  max-width: min(100%, 8.75rem);
+  max-width: min(100%, 11rem);
   height: auto;
   object-fit: contain;
-  filter: brightness(0) invert(1);
+  border-radius: 6px;
+  filter: drop-shadow(0 4px 12px rgb(0 0 0 / 0.28));
 }
 
 .loyalty-qr-card {

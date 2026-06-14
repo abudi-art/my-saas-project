@@ -6,7 +6,7 @@ import { CustomerQr } from "@/components/loyalty/customer-qr";
 import { StampGrid } from "@/components/loyalty/stamp-grid";
 import { WalletButtons } from "@/components/loyalty/wallet-buttons";
 import {
-  BILCLEANIKEN_LOGO_URL,
+  BILCLEANIKEN_BADGE_URL,
   CARD_TARGET_POINTS,
   defaultLocale,
   formatGreeting,
@@ -74,17 +74,15 @@ function HeroHeaderRow({
   copy: ReturnType<typeof getLoyaltyCopy>;
 }) {
   return (
-    <header className="flex items-center justify-between gap-4">
-      <div className="loyalty-logo-badge shrink-0">
-        <Image
-          src={BILCLEANIKEN_LOGO_URL}
-          alt={copy.brandName}
-          width={148}
-          height={40}
-          className="loyalty-logo-badge-image h-7 w-auto sm:h-8"
-          priority
-        />
-      </div>
+    <header className="loyalty-logo-container">
+      <Image
+        src={BILCLEANIKEN_BADGE_URL}
+        alt={copy.brandName}
+        width={176}
+        height={52}
+        className="loyalty-logo-official h-10 w-auto shrink-0 sm:h-11"
+        priority
+      />
       <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
     </header>
   );
@@ -209,7 +207,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
 
   return (
     <div
-      className="loyalty-page min-h-screen bg-gradient-to-b from-slate-100 via-slate-50 to-blue-50"
+      className="loyalty-page"
       dir={rtl ? "rtl" : "ltr"}
     >
       {toast && (
