@@ -73,10 +73,10 @@ body {
   background-image: linear-gradient(
     180deg,
     var(--bil-sky-light) 0%,
-    var(--bil-sky-mid) 22%,
-    var(--bil-sky-deep) 48%,
-    var(--bil-navy) 72%,
-    var(--bil-navy-mid) 86%,
+    var(--bil-sky-mid) 18%,
+    var(--bil-sky-deep) 42%,
+    var(--bil-navy) 68%,
+    var(--bil-navy-mid) 82%,
     var(--bil-navy-dark) 100%
   );
   background-attachment: fixed;

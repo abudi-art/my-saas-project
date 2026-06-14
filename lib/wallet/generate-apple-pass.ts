@@ -1,7 +1,7 @@
 import { PKPass } from "passkit-generator";
 import sharp from "sharp";
 import {
-  BILCLEANIKEN_LOGO_URL,
+  BILCLEANIKEN_LOGO_OPAQUE_URL,
   CARD_TARGET_POINTS,
 } from "@/lib/i18n/loyalty";
 import {
@@ -16,7 +16,7 @@ type GenerateApplePassInput = {
 };
 
 async function loadPassImages() {
-  const response = await fetch(BILCLEANIKEN_LOGO_URL);
+  const response = await fetch(BILCLEANIKEN_LOGO_OPAQUE_URL);
   if (!response.ok) {
     throw new Error("Failed to fetch Bilcleaniken logo for pass assets");
   }

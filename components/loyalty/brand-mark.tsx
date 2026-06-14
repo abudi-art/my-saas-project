@@ -8,7 +8,7 @@ type BrandMarkProps = {
   variant?: "hero" | "toolbar";
 };
 
-/** Car mascot from image-2 brand assets — readable on sky-to-navy gradient backgrounds. */
+/** Car mascot from image-3 — readable on sky-to-navy gradient backgrounds. */
 export function BrandMark({
   brandName = "Bilcleaniken",
   className = "",
@@ -20,9 +20,9 @@ export function BrandMark({
         <Image
           src={BILCLEANIKEN_LOGO_URL}
           alt={brandName}
-          width={80}
-          height={80}
-          className="h-20 w-20 shrink-0 object-contain drop-shadow-[0_6px_20px_rgba(0,42,85,0.35)]"
+          width={96}
+          height={96}
+          className="h-24 w-24 shrink-0 object-contain drop-shadow-[0_8px_24px_rgba(0,42,85,0.35)]"
           unoptimized
           priority
         />
@@ -32,14 +32,14 @@ export function BrandMark({
 
   return (
     <div
-      className={`flex shrink-0 items-center gap-2 rounded-xl bg-[#003E7E]/92 px-2.5 py-1.5 shadow-[0_4px_16px_rgba(0,42,85,0.28)] ring-1 ring-white/20 backdrop-blur-sm ${className}`}
+      className={`flex shrink-0 items-center gap-2.5 rounded-2xl bg-[#003E7E]/95 px-3 py-2 shadow-[0_6px_20px_rgba(0,42,85,0.32)] ring-1 ring-white/25 backdrop-blur-sm ${className}`}
     >
       <Image
         src={BILCLEANIKEN_LOGO_URL}
         alt=""
-        width={40}
-        height={40}
-        className="h-9 w-9 shrink-0 object-contain"
+        width={44}
+        height={44}
+        className="h-10 w-10 shrink-0 object-contain"
         unoptimized
         priority
       />
