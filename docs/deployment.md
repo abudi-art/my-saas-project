@@ -58,14 +58,19 @@ Copy values from your local `.env` (Supabase → Project Settings → Database �
 [`package.json`](package.json) build script:
 
 ```bash
-prisma generate && prisma migrate deploy && next build
+prisma generate && next build
 ```
 
-On each deploy, Vercel:
+Vercel builds **do not** run `prisma migrate deploy` (migrations need a direct DB connection and often fail in the build environment). Apply migrations locally or in CI instead:
+
+```bash
+npm run db:migrate:deploy
+```
+
+On each Vercel deploy:
 
 1. Generates the Prisma client
-2. Applies pending migrations via `DIRECT_URL`
-3. Builds the Next.js app (API routes use `DATABASE_URL` at runtime)
+2. Builds the Next.js app (API routes use `DATABASE_URL` at runtime)
 
 ## 5. Verify production
 
