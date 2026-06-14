@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { resolveServerAppUrl } from "@/lib/loyalty/stamps";
 import { getPhoneLookupVariants } from "@/lib/phone/normalize";
 import { LoyaltyView } from "./loyalty-view";
 
@@ -36,7 +37,7 @@ export default async function LoyaltyPage({ params }: PageProps) {
     <LoyaltyView
       phone={phone}
       customer={notFound ? null : customer}
-      appUrl={process.env.NEXT_PUBLIC_APP_URL}
+      appUrl={resolveServerAppUrl()}
       configError={
         !process.env.NEXT_PUBLIC_SUPABASE_URL ||
         !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY

@@ -52,6 +52,8 @@ export const loyaltyTranslations = {
     walletLoading: "Förbereder kort…",
     walletError: "Kunde inte skapa plånbokskort. Försök igen senare.",
     downloadQr: "Ladda ner",
+    qrLinkError: "QR-länken kunde inte skapas. Kontrollera app-URL.",
+    qrGenerateError: "QR-koden kunde inte genereras. Försök igen.",
   },
   en: {
     brandName: "Bilcleaniken",
@@ -89,6 +91,8 @@ export const loyaltyTranslations = {
     walletLoading: "Preparing pass…",
     walletError: "Could not create wallet pass. Please try again later.",
     downloadQr: "Download",
+    qrLinkError: "Could not build QR link. Check the app URL setting.",
+    qrGenerateError: "Could not generate QR code. Please try again.",
   },
   ar: {
     brandName: "Bilcleaniken",
@@ -126,6 +130,8 @@ export const loyaltyTranslations = {
     walletLoading: "جاري تجهيز البطاقة…",
     walletError: "تعذر إنشاء بطاقة المحفظة. حاول مرة أخرى.",
     downloadQr: "تنزيل",
+    qrLinkError: "تعذر إنشاء رابط QR. تحقق من إعداد عنوان التطبيق.",
+    qrGenerateError: "تعذر إنشاء رمز QR. حاول مرة أخرى.",
   },
 } as const;
 

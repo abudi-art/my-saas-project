@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { LoyaltyCopy } from "@/lib/i18n/loyalty";
 import {
@@ -14,6 +14,7 @@ type CustomerQrProps = {
   appUrl?: string;
 };
 
+/** High-contrast QR: black on white, level H, quiet zone via margin + frame padding. */
 const QR_OPTIONS = {
   errorCorrectionLevel: "H" as const,
   margin: 4,
@@ -22,29 +23,22 @@ const QR_OPTIONS = {
 };
 
 export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
+  const [qrPayload, setQrPayload] = useState<string | null>(null);
   const [qrSvg, setQrSvg] = useState<string | null>(null);
   const [qrError, setQrError] = useState<string | null>(null);
   const customerCode = getCustomerCode(phone);
 
-  const qrPayload = useMemo(() => {
-    const fromProp = appUrl?.trim().replace(/\/$/, "");
-    if (fromProp) {
-      return buildLoyaltyPageUrl(phone, fromProp);
+  useEffect(() => {
+    const url = buildLoyaltyPageUrl(phone, appUrl);
+    setQrPayload(url);
+    if (!url) {
+      setQrSvg(null);
+      setQrError(copy.qrLinkError);
     }
-
-    if (typeof window !== "undefined") {
-      return buildLoyaltyPageUrl(phone, window.location.origin);
-    }
-
-    return null;
-  }, [phone, appUrl]);
+  }, [phone, appUrl, copy.qrLinkError]);
 
   useEffect(() => {
-    if (!qrPayload) {
-      setQrSvg(null);
-      setQrError("NEXT_PUBLIC_APP_URL is not configured");
-      return;
-    }
+    if (!qrPayload) return;
 
     let cancelled = false;
 
@@ -58,14 +52,14 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
       .catch(() => {
         if (!cancelled) {
           setQrSvg(null);
-          setQrError(copy.walletError);
+          setQrError(copy.qrGenerateError);
         }
       });
 
     return () => {
       cancelled = true;
     };
-  }, [qrPayload, copy.walletError]);
+  }, [qrPayload, copy.qrGenerateError]);
 
   async function downloadQr() {
     if (!qrPayload) return;
@@ -77,7 +71,7 @@ export function CustomerQr({ phone, copy, appUrl }: CustomerQrProps) {
       link.download = `${customerCode}.png`;
       link.click();
     } catch {
-      setQrError(copy.walletError);
+      setQrError(copy.qrGenerateError);
     }
   }
 

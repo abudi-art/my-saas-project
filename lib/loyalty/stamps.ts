@@ -22,9 +22,19 @@ export function getCustomerCode(phone: string): string {
   return `BIL-${suffix}`;
 }
 
-export function resolveAppBaseUrl(): string {
+export function resolveServerAppUrl(): string | undefined {
   const fromEnv = process.env.NEXT_PUBLIC_APP_URL?.trim().replace(/\/$/, "");
   if (fromEnv) return fromEnv;
+
+  const vercelHost = process.env.VERCEL_URL?.trim().replace(/^https?:\/\//, "");
+  if (vercelHost) return `https://${vercelHost}`;
+
+  return undefined;
+}
+
+export function resolveAppBaseUrl(): string {
+  const fromServer = resolveServerAppUrl();
+  if (fromServer) return fromServer;
 
   if (typeof window !== "undefined" && window.location.origin) {
     return window.location.origin;
