@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { BrandTopBar } from "@/components/loyalty/brand-top-bar";
+import { BrandMark } from "@/components/loyalty/brand-mark";
 import { CustomerQr } from "@/components/loyalty/customer-qr";
 import { StampGrid } from "@/components/loyalty/stamp-grid";
 import { WalletButtons } from "@/components/loyalty/wallet-buttons";
@@ -59,6 +59,26 @@ function LanguageSwitcher({
           {label}
         </button>
       ))}
+    </div>
+  );
+}
+
+function PageToolbar({
+  locale,
+  onLocaleChange,
+  brandName,
+}: {
+  locale: Locale;
+  onLocaleChange: (locale: Locale) => void;
+  brandName: string;
+}) {
+  return (
+    <div
+      className="mb-4 flex items-center justify-between gap-3"
+      dir="ltr"
+    >
+      <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
+      <BrandMark brandName={brandName} />
     </div>
   );
 }
@@ -195,12 +215,13 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
         <div className="celebration-overlay pointer-events-none fixed inset-0 z-40" aria-hidden />
       )}
 
-      <BrandTopBar
-        brandName={copy.brandName}
-        trailing={<LanguageSwitcher locale={locale} onChange={setLocale} />}
-      />
+      <main className="mx-auto flex min-h-screen max-w-md flex-col px-4 pb-8 pt-5 sm:px-6">
+        <PageToolbar
+          locale={locale}
+          onLocaleChange={setLocale}
+          brandName={copy.brandName}
+        />
 
-      <main className="mx-auto flex min-h-[calc(100vh-4.5rem)] max-w-md flex-col px-4 pb-8 pt-4 sm:px-6">
         {notFound ? (
           <>
             <section className="flex flex-1 flex-col items-center justify-center">
@@ -288,8 +309,6 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
               </div>
             </article>
 
-            <CustomerQr phone={canonicalPhone} copy={copy} appUrl={appUrl} />
-
             <div className={stampGridPulse ? "stamp-grid-sync-pulse" : undefined}>
               <StampGrid
                 points={points}
@@ -297,6 +316,8 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
                 animatingIndex={animatingStamp}
               />
             </div>
+
+            <CustomerQr phone={canonicalPhone} copy={copy} appUrl={appUrl} />
 
             <WalletButtons phone={canonicalPhone} copy={copy} />
 
