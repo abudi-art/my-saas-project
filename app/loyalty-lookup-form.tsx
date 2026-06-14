@@ -15,9 +15,9 @@ export function LoyaltyLookupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
-      <label className="block text-left">
-        <span className="text-sm font-medium text-gray-600">
+    <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4 text-left">
+      <label className="block">
+        <span className="text-sm font-medium text-[#1E293B]">
           Telefonnummer / Phone
         </span>
         <input
@@ -27,12 +27,12 @@ export function LoyaltyLookupForm() {
           placeholder="0701234567"
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
-          className="mt-2 w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-slate-900 shadow-sm outline-none ring-blue-600 focus:ring-2"
+          className="mt-2 w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-[#1E293B] shadow-sm outline-none ring-[#003E7E] focus:ring-2"
         />
       </label>
       <button
         type="submit"
-        className="w-full rounded-xl bg-blue-700 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-800"
+        className="loyalty-btn-primary w-full px-4 py-3 text-sm"
       >
         Visa lojalitetspoäng
       </button>

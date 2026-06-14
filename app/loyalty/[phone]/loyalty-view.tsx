@@ -1,12 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BrandTopBar } from "@/components/loyalty/brand-top-bar";
 import { CustomerQr } from "@/components/loyalty/customer-qr";
 import { StampGrid } from "@/components/loyalty/stamp-grid";
 import { WalletButtons } from "@/components/loyalty/wallet-buttons";
 import {
-  BILCLEANIKEN_BADGE_URL,
   CARD_TARGET_POINTS,
   defaultLocale,
   formatGreeting,
@@ -74,18 +73,10 @@ function HeroHeaderRow({
   copy: ReturnType<typeof getLoyaltyCopy>;
 }) {
   return (
-    <header className="loyalty-top-bar px-5 py-5 sm:px-6">
-      <Image
-        src={BILCLEANIKEN_BADGE_URL}
-        alt={copy.brandName}
-        width={176}
-        height={52}
-        className="loyalty-logo-official h-10 w-auto shrink-0 sm:h-11"
-        priority
-        unoptimized
-      />
-      <LanguageSwitcher locale={locale} onChange={onLocaleChange} />
-    </header>
+    <BrandTopBar
+      brandName={copy.brandName}
+      trailing={<LanguageSwitcher locale={locale} onChange={onLocaleChange} />}
+    />
   );
 }
 
@@ -270,7 +261,7 @@ export function LoyaltyView({ phone, customer, configError, appUrl }: LoyaltyVie
                 onLocaleChange={setLocale}
                 copy={copy}
               />
-              <div className="loyalty-hero-gradient px-6 pb-6 pt-5 text-white">
+              <div className="bg-gradient-to-b from-[#003E7E] to-[#002A55] px-6 pb-6 pt-5 text-white">
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-xs font-medium uppercase tracking-[0.2em] text-white/75">
                     {copy.tagline}

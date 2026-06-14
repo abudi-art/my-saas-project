@@ -34,10 +34,9 @@ body {
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Loyalty stamp card */
 .loyalty-stamp-card {
   position: relative;
-  background: linear-gradient(180deg, var(--bil-navy) 0%, var(--bil-navy-dark) 100%);
+  background: linear-gradient(180deg, #003e7e 0%, #002a55 100%);
 }
 
 .loyalty-card-notch {
@@ -66,7 +65,7 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  background-color: var(--bil-navy);
+  background-color: #003e7e;
 }
 
 .loyalty-logo-official {
@@ -77,7 +76,7 @@ body {
 }
 
 .loyalty-hero-gradient {
-  background: linear-gradient(180deg, var(--bil-navy) 0%, var(--bil-navy-dark) 100%);
+  background: linear-gradient(180deg, #003e7e 0%, #002a55 100%);
 }
 
 .loyalty-card-surface {
@@ -89,14 +88,14 @@ body {
 
 .loyalty-btn-primary {
   border-radius: 0.75rem;
-  background-color: var(--bil-navy);
-  color: var(--bil-text-light);
+  background-color: #003e7e;
+  color: #ffffff;
   font-weight: 600;
   transition: background-color 0.15s ease;
 }
 
 .loyalty-btn-primary:hover {
-  background-color: var(--bil-navy-dark);
+  background-color: #002a55;
 }
 
 .loyalty-qr-card {
