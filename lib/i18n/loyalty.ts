@@ -12,8 +12,11 @@ export const locales: { code: Locale; label: string }[] = [
 
 export const defaultLocale: Locale = "sv";
 
-/** Transparent car mascot (image-3) for hero/toolbar on gradient backgrounds. */
-export const BILCLEANIKEN_LOGO_URL = "/branding/bilcleaniken-car-mascot.png";
+/** Official car icon from bilcleaniken.se logo.svg — transparent, no frame. */
+export const BILCLEANIKEN_LOGO_URL = "/branding/bilcleaniken-car-icon.svg";
+
+/** Official BilCleaniken wordmark paths from bilcleaniken.se — no border box. */
+export const BILCLEANIKEN_WORDMARK_URL = "/branding/bilcleaniken-wordmark.svg";
 
 /** Opaque car mark on navy — used where a solid logo tile is required (e.g. wallet). */
 export const BILCLEANIKEN_LOGO_OPAQUE_URL = "/branding/bilcleaniken-car-mark.png";
