@@ -12,8 +12,8 @@ export const locales: { code: Locale; label: string }[] = [
 
 export const defaultLocale: Locale = "sv";
 
-/** Official car icon from bilcleaniken.se logo.svg — transparent, no frame. */
-export const BILCLEANIKEN_LOGO_URL = "/branding/bilcleaniken-car-icon.svg";
+/** Official 3D car icon from bilcleaniken.se — transparent PNG, no frame. */
+export const BILCLEANIKEN_LOGO_URL = "/branding/bilcleaniken-car-character.png";
 
 /** Official BilCleaniken wordmark paths from bilcleaniken.se — no border box. */
 export const BILCLEANIKEN_WORDMARK_URL = "/branding/bilcleaniken-wordmark.svg";

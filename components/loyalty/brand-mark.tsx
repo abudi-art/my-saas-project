@@ -29,8 +29,8 @@ export function BrandMark({
       <Image
         src={BILCLEANIKEN_LOGO_URL}
         alt=""
-        width={82}
-        height={61}
+        width={304}
+        height={244}
         className={`shrink-0 object-contain ${
           isHero ? "h-[4.5rem] w-auto sm:h-[5rem]" : "h-11 w-auto"
         }`}
